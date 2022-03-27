@@ -1,0 +1,37 @@
+<div class="container" >
+
+    <%= render 'shared/errors', obj: @user %>
+      <div class = "row justify-content-center">
+        <div class="col-10">
+          <%= form_with(model: @user) do |form| %>
+            <div class="form-group row">
+                <%= form.label :username , class: "col-2 col-form-label"%>
+                <div class="col-10">
+                  <%= form.text_field :username , class: "form-control"%>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+              
+                <%= form.label :email , class: "col-2 col-form-label"%>
+                <div class="col-10">
+                <%= form.text_field :emails ,class: "form-control"%>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              
+                <%= form.label :password , class: "col-2 col-form-label"%>
+                <div class="col-10">
+                <%= form.password_field :password ,class: "form-control"%>
+              </div>
+            </div>
+      
+        <div class="actions text-center" >
+          <%= form.submit(@user.new_record? ? "Register" : "Update", class: "btn btn-success") %>
+    
+        </div>
+      </div>
+      <% end %>
+      </div>
+    </div>

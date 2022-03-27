@@ -1,0 +1,36 @@
+<div id="page-content">
+    <p id="notice"><%= notice %></p>
+    
+    <h2 class="text-center mt-4">Users</h2>
+    
+    <table class="table table-sm table-dark table-bordered ">
+      <thead>
+        <tr>
+          
+          <th class="text-center" scope="col">Hostname</th>
+          <th class="text-center" scope="col">IP/FQDN</th>
+          <th class="text-center" scope="col">Actions</th>
+       
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <% @hosts.each do |host| %>
+          
+            <tr>
+              <td ><%= host.hostname %></td>
+              <td ><%= host.ip_address_or_fqdn %></td>
+              <td>
+              <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
+              <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
+              
+              </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <div class="text-center">
+    <%= link_to 'Create', new_host_path, class: "btn btn-success text-white" %>
+    <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
+    </div>
+    </div>

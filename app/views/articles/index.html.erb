@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<h2 class="text-center mt-4">Articles</h2>
+
+<table class="table table-sm table-dark">
+  <thead>
+    <tr>
+      
+      <th class="text-center" scope="col">Title</th>
+      <th class="text-center" scope="col">Description</th>
+      <th class="text-center" scope="col">Created at</th>
+      <th class="text-center" scope="col">Last update</th>
+      <th class="text-center" scope="col">Actions</th>
+   
+    </tr>
+  </thead>
+  <tbody class="text-center">
+    <% @articles.each do |article| %>
+      <% if article.title == "test_color" %>
+        <tr>
+          <td class="invalid"><%= article.title %></td>
+          <td class="invalid"><%= article.description %></td>
+          <td class="invalid"><%= time_ago_in_words(article.created_at) %></td>
+          <td class="invalid"><%= time_ago_in_words(article.updated_at) %></td>
+          <td>
+          <%= link_to 'Show', article_path(article) , class: "btn btn-outline-success text-white" %>
+          <%= link_to 'Edit', edit_article_path(article), class: "btn btn-outline-warning text-white"%>
+          <%= link_to 'Delete', article, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete article '+article.title+'?' } %>
+          </td>
+        </tr>
+      <% else %>
+        <tr>
+          <td ><%= article.title %></td>
+          <td ><%= article.description %></td>
+          <td ><%= time_ago_in_words(article.created_at) %></td>
+          <td ><%= time_ago_in_words(article.updated_at) %></td>
+          <td >
+          <%= link_to 'Show', article_path(article) , class: "btn btn-outline-success text-white" %>
+          <%= link_to 'Edit', edit_article_path(article), class: "btn btn-outline-warning text-white"%>
+          <%= link_to 'Delete', article, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete article '+article.title+'?' } %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<div>
+<%= link_to 'Create', new_article_path, class: "btn btn-success text-white" %>
+<%= link_to 'Home', home_path , class: "btn btn-primary text-white" %>
+</div>
