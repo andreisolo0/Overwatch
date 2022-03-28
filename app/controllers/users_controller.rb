@@ -7,7 +7,7 @@ class UsersController < ApplicationController
         @user = User.new(user_params)
         if @user.save
             flash[:notice] = "#{@user.username} welcome to Overwatch"
-            redirect_to root_path
+            redirect_to users_path
         else
             render 'new'
         end
@@ -31,7 +31,8 @@ class UsersController < ApplicationController
     end
 
     def index
-        @users = User.all
+        #@users = User.all
+        @users = User.paginate(page: params[:page], per_page: 3)
     end
 
     def show

@@ -2,7 +2,11 @@
   
 
 
-<h2 class="text-center mt-4">Users</h2>
+<h2 class="text-center mt-4" id="page-title">Users</h2>
+
+
+
+<%= render 'shared/pagination', obj: @users %>
 
 <table class="table table-sm table-dark table-bordered ">
   <thead>
@@ -33,7 +37,7 @@
     <% end %>
   </tbody>
 </table>
-
+<%= render 'shared/pagination', obj: @users %>
 <div class="text-center">
 <%= link_to 'Create', signup_path, class: "btn btn-success text-white" %>
 <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>

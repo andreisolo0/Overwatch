@@ -30,7 +30,8 @@ class HostsController < ApplicationController
     end
 
     def index
-        @hosts = Host.all
+        #@hosts = Host.all
+        @hosts = Host.paginate(page: params[:page], per_page: 3)
     end
 
 

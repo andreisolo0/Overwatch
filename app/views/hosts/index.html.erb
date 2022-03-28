@@ -1,6 +1,8 @@
 <div id="page-content">
-    <h2 class="text-center mt-4 " id="page-title">Users</h2>
+    <h2 class="text-center mt-4 " id="page-title">Hosts</h2>
     
+    <%= render 'shared/pagination', obj: @hosts %>
+
     <table class="table table-sm table-dark table-bordered ">
       <thead>
         <tr>
@@ -26,7 +28,7 @@
         <% end %>
       </tbody>
     </table>
-    
+    <%= render 'shared/pagination', obj: @hosts %>
     <div class="text-center">
     <%= link_to 'Create', new_host_path, class: "btn btn-success text-white" %>
     <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
