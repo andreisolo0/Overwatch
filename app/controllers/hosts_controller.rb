@@ -19,9 +19,10 @@ class HostsController < ApplicationController
     end
 
     def update
+        @host = Host.find(params[:id])
         if @host.update(host_params)
-            #flash[:notice] = "User #{user.username} was updated successfully"
-            redirect_to hosts_path
+            flash[:notice] = "Host #{@host.hostname} was updated successfully"
+            redirect_to @host
        else
           render 'edit'
        end

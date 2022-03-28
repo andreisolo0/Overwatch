@@ -18,8 +18,9 @@
                 Hosts
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="new_host">Create host</a>
-                <a class="dropdown-item" href="hosts">View all hosts</a>
+                <%= link_to "Create host", new_host_path, class: "dropdown-item" %>
+                
+                <%= link_to "View all hosts", hosts_path, class: "dropdown-item" %>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>
               </div>
