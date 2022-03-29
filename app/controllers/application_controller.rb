@@ -11,4 +11,11 @@ class ApplicationController < ActionController::Base
         # make current_user return a boolean
         !!current_user 
     end
+
+    def require_user
+        if !logged_in?
+            #flash[:alert] = "You need to be logged in to perform this action!"
+            redirect_to forbidden_path
+        end
+    end
 end

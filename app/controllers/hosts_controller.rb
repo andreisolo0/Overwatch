@@ -1,4 +1,7 @@
 class HostsController < ApplicationController
+    before_action :require_user
+    before_action :permit_edit_own_host?, only: [:edit, :update, :destroy]
+
     def new
         @host = Host.new
     end
@@ -42,5 +45,13 @@ class HostsController < ApplicationController
     private
     def host_params
         params.require(:host).permit( :ip_address_or_fqdn, :hostname)
+    end
+
+    def permit_edit_own_user?
+        #Add after correlation between hosts and users
+        #if current_user != @host.user
+        #    flash[:alert] = "You don't have rights to edit this host"
+        #    redirect_to @host
+        #end
     end
 end
