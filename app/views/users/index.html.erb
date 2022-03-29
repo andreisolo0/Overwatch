@@ -1,45 +1,45 @@
-<div id="page-content">
-  
 
 
-<h2 class="text-center mt-4" id="page-title">Users</h2>
+  <div id="page-content">
+
+  <h2 class="text-center mt-4" id="page-title">Users</h2>
 
 
 
-<%= render 'shared/pagination', obj: @users %>
+  <%= render 'shared/pagination', obj: @users %>
 
-<table class="table table-sm table-dark table-bordered ">
-  <thead>
-    <tr>
-      
-      <th class="text-center" scope="col">User</th>
-      <th class="text-center" scope="col">Email</th>
-      <th class="text-center" scope="col">Created at</th>
-      <th class="text-center" scope="col">Last update</th>
-      <th class="text-center" scope="col">Actions</th>
-   
-    </tr>
-  </thead>
-  <tbody class="text-center">
-    <% @users.each do |user| %>
-      
-        <tr>
-          <td ><%= user.username %></td>
-          <td ><%= user.emails %></td>
-          <td ><%= time_ago_in_words(user.created_at) %></td>
-          <td ><%= time_ago_in_words(user.updated_at) %></td>
-          <td>
-          <%= link_to 'View', user_path(user) , class: "btn btn-outline-success text-white" %>
-          <%= link_to 'Edit', edit_user_path(user), class: "btn btn-outline-warning text-white"%>
-          
-          </td>
-        </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= render 'shared/pagination', obj: @users %>
-<div class="text-center">
-<%= link_to 'Create', signup_path, class: "btn btn-success text-white" %>
-<%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
-</div>
-</div>
+  <table class="table table-sm table-dark table-bordered ">
+    <thead>
+      <tr>
+        
+        <th class="text-center" scope="col">User</th>
+        <th class="text-center" scope="col">Email</th>
+        <th class="text-center" scope="col">Created at</th>
+        <th class="text-center" scope="col">Last update</th>
+        <th class="text-center" scope="col">Actions</th>
+    
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <% @users.each do |user| %>
+        
+          <tr>
+            <td ><%= user.username %></td>
+            <td ><%= user.emails %></td>
+            <td ><%= time_ago_in_words(user.created_at) %></td>
+            <td ><%= time_ago_in_words(user.updated_at) %></td>
+            <td>
+            <%= link_to 'View', user_path(user) , class: "btn btn-outline-success text-white" %>
+            <%= link_to 'Edit', edit_user_path(user), class: "btn btn-outline-warning text-white"%>
+            
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render 'shared/pagination', obj: @users %>
+  <div class="text-center">
+  <%= link_to 'Create', signup_path, class: "btn btn-success text-white" %>
+  <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
+  </div>
+  </div>

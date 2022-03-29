@@ -6,7 +6,12 @@
             <p class="lead"> </p>
             <hr class="my-4">
             <p>A lightweight Web Application to monitor and control hardware, software, IoT sensors and much more</p>
-            <a class="btn btn-success btn-lg text-white" href="signup" role="button">Sign up</a>
+            <% if !logged_in? %>
+              
+                <%= link_to "Sign up", signup_path, class: " btn btn-success btn-lg text-white" %>
+              
+            <% end %>
+            
             
         </div>
     </div>
