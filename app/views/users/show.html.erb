@@ -18,11 +18,27 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <p class="m-b-10 f-w-600">Email</p>
-                                        <h6 class="text-muted f-w-400"> <%=@user.emails%></h6>
+                                        <h6 class="text-muted f-w-400"> <%=@user.email%></h6>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="m-b-10 f-w-600">Full name</p>
-                                        <h6 class="text-muted f-w-400">Full_user_name</h6>
+                                        <p class="m-b-10 f-w-600">First name</p>
+                                        <h6 class="text-muted f-w-400"><%=@user.first_name%></h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Last name</p>
+                                        <h6 class="text-muted f-w-400"><%=@user.last_name%></h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Admin</p>
+                                        <h6 class="text-muted f-w-400"><%=@user.admin%></h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Regular user</p>
+                                        <h6 class="text-muted f-w-400"><%=@user.regular_user%></h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Viewer</p>
+                                        <h6 class="text-muted f-w-400"><%=@user.viewer%></h6>
                                     </div>
                                 </div>
                                 

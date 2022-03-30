@@ -22,7 +22,7 @@
               <td>
               <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
               <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
-              
+              <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
               </td>
             </tr>
         <% end %>

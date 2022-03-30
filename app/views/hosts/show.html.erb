@@ -1,5 +1,7 @@
 <div id="page-content">
-    <h2 class="text-center mt-4"><%= @host.hostname %></h2>
+  
+  <h2 class="text-center mt-4"><img src="https://cdn-icons-png.flaticon.com/512/59/59844.png" class="img-fluid mx-auto d-block" width="90" 
+    height="80"><%= @host.hostname %></h2>
   
     <div class="container">
       <div class="row justify-content-md-center">
@@ -8,6 +10,7 @@
 
             <div class="card-body">
               <div class="card-text text-center font-weight-bold ">IP/FQDN: <%=  @host.ip_address_or_fqdn %> </div>
+              <div class="card-text text-center font-weight-bold ">Owned by: <%=  User.find(@host.user_id).username %> </div>
               <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info" %>
               <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
             </div>
