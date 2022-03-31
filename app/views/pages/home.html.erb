@@ -2,13 +2,16 @@
 
     <div class="container" id="home-container">
         <div class="jumbotron text-center text-white">
+            <img src="<%= asset_path('iot-connected.png') %>" class="img-fluid mx-auto d-block" width="35%" height="35%">
+            <br>
             <h1 class="display-4">Monitor your World</h1>
             <p class="lead"> </p>
-            <hr class="my-4">
-            <p>A lightweight Web Application to monitor and control hardware, software, IoT sensors and much more</p>
+            <hr class="my-2">
+            <h6 id="blur-background-container">A lightweight Web Application to monitor and control hardware, software, IoT sensors and much more</h6>
             <% if !logged_in? %>
-              
-                <%= link_to "Sign up", signup_path, class: " btn btn-success btn-lg text-white" %>
+                <br>
+                <br>
+                <%= link_to "SIGN UP", signup_path, class: " btn btn-success btn-lg text-white" %>
               
             <% end %>
             

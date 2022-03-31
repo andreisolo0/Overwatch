@@ -9,6 +9,7 @@
           
           <th class="text-center" scope="col">Hostname</th>
           <th class="text-center" scope="col">IP/FQDN</th>
+          <th class="text-center" scope="col">Owner</th>
           <th class="text-center" scope="col">Actions</th>
        
         </tr>
@@ -19,10 +20,13 @@
             <tr>
               <td ><%= host.hostname %></td>
               <td ><%= host.ip_address_or_fqdn %></td>
+              <td ><%= User.find_by(id: host.user_id).username %></td>
               <td>
               <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
-              <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
-              <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
+              <% if @current_user.id == host.user_id || @current_user.admin == true %>
+                <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
+                <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
+              <% end %>
               </td>
             </tr>
         <% end %>

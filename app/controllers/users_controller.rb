@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
     before_action :set_user, only: [:show, :edit, :update, :destroy]
-    before_action :require_user, only: [:show, :edit, :update]
-    before_action :require_same_user, only: [:edit, :update]
+    before_action :require_user, only: [:show, :edit, :update, :destroy, :index]
+    before_action :require_same_user_or_admin, only: [:edit, :update]
 
 
     def new
@@ -59,22 +59,27 @@ class UsersController < ApplicationController
     end
 
     def destroy
-        #@user = User.find(params[:id])
-        username=@user.username
-        username_id=@user.id
-        #Get admin_id to assign orphaned hosts before deletion
-        admin_id=User.find_by(username: 'admin').id
-        Host.where(user_id: username_id).update_all(user_id: admin_id)
-        
-        @user.destroy
-        #to ensure session is destroyed too
-        if session[:user_id] == @user.id
-            session[:user_id] = nil
-            redirect_to root_path
-       else
-            flash[:notice] = "User "+ username +" was deleted succesfully!"
-            redirect_to users_path
-       end
+        if @user.username == 'admin'
+            flash[:warn] = "Admin cannot be deleted!"
+            redirect_to @user
+        else
+            #@user = User.find(params[:id])
+            username=@user.username
+            username_id=@user.id
+            #Get admin_id to assign orphaned hosts before deletion
+            admin_id=User.find_by(username: 'admin').id
+            Host.where(user_id: username_id).update_all(user_id: admin_id)
+            
+            @user.destroy
+            #to ensure session is destroyed too
+            if session[:user_id] == @user.id
+                session[:user_id] = nil
+                redirect_to root_path
+            else
+                flash[:notice] = "User "+ username +" was deleted succesfully!"
+                redirect_to users_path
+            end
+        end
     end
 
     private
@@ -85,10 +90,11 @@ class UsersController < ApplicationController
     def set_user
         @user = User.find(params[:id])
     end
-    def require_same_user
-        if current_user != @user
-            flash[:alert] = "You can only edit your own account"
-            redirect_to @user
+    def require_same_user_or_admin
+        
+        if current_user != @user && current_user.admin != true
+            flash[:alert] = "You can only modify your own account"
+            redirect_to users_path
         end
     end
     
