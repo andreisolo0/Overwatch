@@ -59,6 +59,7 @@ class UsersController < ApplicationController
     end
 
     def destroy
+    
         if @user.username == 'admin'
             flash[:warn] = "Admin cannot be deleted!"
             redirect_to @user
@@ -72,13 +73,19 @@ class UsersController < ApplicationController
             
             @user.destroy
             #to ensure session is destroyed too
-            if session[:user_id] == @user.id
-                session[:user_id] = nil
-                redirect_to root_path
-            else
-                flash[:notice] = "User "+ username +" was deleted succesfully!"
-                redirect_to users_path
-            end
+
+            session[:user_id] = nil if @user == current_user
+            flash[:notice] = "User "+ username +" was deleted succesfully!"
+            redirect_to users_path
+
+            #refactored smarter above
+            #if session[:user_id] == @user.id
+            #    session[:user_id] = nil
+            #    redirect_to root_path
+            #else
+            #    flash[:notice] = "User "+ username +" was deleted succesfully!"
+            #    redirect_to users_path
+            #end
         end
     end
 
