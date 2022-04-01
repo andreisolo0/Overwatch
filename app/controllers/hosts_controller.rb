@@ -59,8 +59,6 @@ class HostsController < ApplicationController
 
     def permit_edit_own_host_or_admin
         #Add after correlation between hosts and users
-        byebug
-
         if current_user.id != @host.user_id && current_user.admin != true
             flash[:alert] = "You don't have rights to modify this host"
             redirect_to hosts_path
