@@ -36,7 +36,7 @@ class HostsController < ApplicationController
 
     def index
         #@hosts = Host.all
-        @hosts = Host.paginate(page: params[:page], per_page: 3)
+        @hosts = Host.paginate(page: params[:page], per_page: 25)
     end
 
 
@@ -54,7 +54,7 @@ class HostsController < ApplicationController
 
     private
     def host_params
-        params.require(:host).permit( :ip_address_or_fqdn, :hostname)
+        params.require(:host).permit( :ip_address_or_fqdn, :hostname, :user_to_connect, :password, :ssh_port, :run_as_sudo)
     end
 
     def permit_edit_own_host_or_admin

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_30_181530) do
+ActiveRecord::Schema.define(version: 2022_04_03_202206) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -25,8 +25,12 @@ ActiveRecord::Schema.define(version: 2022_03_30_181530) do
     t.string "ip_address_or_fqdn"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "host_id"
     t.integer "user_id"
+    t.string "user_to_connect"
+    t.string "password"
+    t.integer "ssh_port"
+    t.boolean "run_as_sudo"
+    t.string "os"
   end
 
   create_table "users", force: :cascade do |t|

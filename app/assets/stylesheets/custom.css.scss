@@ -35,7 +35,14 @@
     background-size: cover;
 }
 
+.form_container {
 
+    border-radius: 10px;
+    background: #b2c3d3;
+    padding: 20px; 
+    background-image: var(--bs-gradient);
+
+}
 h1 {
 
     color: rgb(255, 255, 255);

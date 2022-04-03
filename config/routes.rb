@@ -13,4 +13,6 @@ Rails.application.routes.draw do
   post 'login' , to: 'sessions#create'
   delete 'logout' , to: 'sessions#destroy'
   get 'forbidden' , to: 'pages#forbidden'
+  #resources :actions, only: %i[index]
+  post 'test_connection', to: 'actions#test_connection'
 end

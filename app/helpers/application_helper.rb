@@ -1,6 +1,6 @@
 module ApplicationHelper
 
-    #helpers give methodsvariables just for the views. To have this methods and the variables in controllers write them in application controller
+    #helpers give methods variables just for the views. To have this methods and the variables in controllers write them in application controller
     #def current_user
         # to avoid multiple queries to database, we make the query only if current_user doesn't exist
     #    @current_user ||= User.find(session[:user_id]) if session[:user_id]
