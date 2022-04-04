@@ -51,9 +51,14 @@ class HostsController < ApplicationController
         @host.destroy
         redirect_to hosts_path
       end
+    
 
+    def show_actions
+        @remote_actions=RemoteAction.where(user_id: @host.user_id)
+    end
     private
     def host_params
+        #byebug
         params.require(:host).permit( :ip_address_or_fqdn, :hostname, :user_to_connect, :password, :ssh_port, :run_as_sudo)
     end
 

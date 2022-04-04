@@ -1,0 +1,48 @@
+<div id="page-content">
+    <h2 class="text-center mt-4 " id="page-title">Actions</h2>
+    
+    <%= render 'shared/pagination', obj: @remote_actions %>
+
+    <table class="table table-sm table-dark table-bordered ">
+      <thead>
+        <tr>
+          
+          <th class="text-center" scope="col">Action name</th>
+          <th class="text-center" scope="col">Script</th>
+          <th class="text-center" scope="col">Command</th>
+          <th class="text-center" scope="col">Owner</th>
+          <th class="text-center" scope="col">Actions</th>
+       
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <% @remote_actions.each do |action| %>
+          
+            <tr>
+              <td ><%= action.action_name %></td>
+              <% if action.script == true %>
+                <td >&#10004;</td>
+                <td ></td>
+              <%else %>
+                <td ></td>
+                <td >&#10004;</td>
+              <%end%>
+              <td ><%= User.find_by(id: action.user_id).username %></td>
+              <td>
+
+              <%= link_to 'View', remote_action_path(action) , class: "btn btn-outline-success text-white" %>
+              <% if @current_user.id == action.user_id || @current_user.admin == true %>
+                <%= link_to 'Edit', edit_remote_action_path(action), class: "btn btn-outline-warning text-white"%>
+                <%= link_to 'Delete', action , method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete ?' } %>
+              <% end %>
+              </td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= render 'shared/pagination', obj: @actions %>
+    <div class="text-center">
+    <%= link_to 'Create', new_remote_action_path, class: "btn btn-success text-white" %>
+    <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
+    </div>
+    </div>

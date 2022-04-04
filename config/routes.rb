@@ -14,5 +14,7 @@ Rails.application.routes.draw do
   delete 'logout' , to: 'sessions#destroy'
   get 'forbidden' , to: 'pages#forbidden'
   #resources :actions, only: %i[index]
-  post 'test_connection', to: 'actions#test_connection'
+  post 'test_connection', to: 'remote_actions#test_connection'
+  resources :items
+  resources :remote_actions
 end

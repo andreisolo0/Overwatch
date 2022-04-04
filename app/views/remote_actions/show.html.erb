@@ -16,22 +16,14 @@
               <div class="card-text text-center ">SSH port: <%=  @host.ssh_port %> </div>
               <div class="card-text text-center ">Run as sudo: <%=  @host.run_as_sudo %> </div>
               <% if @host.os != nil %>
-                <div class="card-text text-center ">Operating system: <%=  @host.os %> </div>
+                <div class="card-text text-center ">Operatin system: <%=  @host.os %> </div>
               <% end %>
 
-              <% actions_array =[] %>
-              <% RemoteAction.where(user_id: @host.user_id).ids.each { |n|   actions_array.append(RemoteAction.find(n).action_name) } %>
 
-              <%= form_with(url: host_path(@host), method: :get, local: true) do |form| %> 
-                <%= form.select :selected_action, actions_array %>
-                <%= form.submit "Run" %>
-              <%end%>
 
               <% if @current_user == User.find(@host.user_id) || @current_user.admin == true %>
-                <%= link_to "Execute remote action", test_connection_path(@host.user_id), method: :post, params[:host_id] => @host.id, class: "btn btn-outline-info" %>
+              
                 <%= link_to "Test connection", test_connection_path(@host.id), method: :post, params[:host_id] => @host.id, class: "btn btn-outline-info" %>
-                <br>
-                <br>
                 <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info" %>
                 <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
               <% end %>
