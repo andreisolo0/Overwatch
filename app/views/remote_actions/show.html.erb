@@ -1,37 +1,58 @@
 <div id="page-content">
   
-  <h2 class="text-center mt-4"><img src="<%= asset_path('host_icon.png') %>" class="img-fluid mx-auto d-block" width="90" 
-    height="80"><%= @host.hostname %></h2>
-  
+  <h2 class="text-center mt-4"><%= @remote_action.action_name %></h2>
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-8 mt-4">
           <div class="card text-center shadow mb-5 bg-white rounded">
+            <% if @current_user == User.find(@remote_action.user_id) || @current_user.admin == true %>
+            <p>Apply on host:</p>
+            <%= form_with(url: test_dropdown_path(:host_id, @remote_action.id), method: :post) do |form| %> 
+              <!-- send :id as params and list the name -->
+                <%= form.select :host_id , Host.where(user_id: current_user).collect { |p| [  p.hostname , p.id] } %>
+                <!--add hiddent field tag to add extra parameter to params hash-->
+                <%= hidden_field_tag(:remote_action_id, @remote_action.id) %>
+                <%= form.submit "Apply" %>
+              <%end%>
 
-            <div class="card-body">
-              <div class="card-text text-center font-weight-bold ">IP/FQDN: <%=  @host.ip_address_or_fqdn %> </div>
-              <div class="card-text text-center font-weight-bold ">Owned by: <%=  User.find(@host.user_id).username %> </div>
 
-              <div class="card-text text-center ">SSH user to connect: <%=  @host.user_to_connect%> </div>
-              <div class="card-text text-center ">SSH port: <%=  @host.ssh_port %> </div>
-              <div class="card-text text-center ">Run as sudo: <%=  @host.run_as_sudo %> </div>
-              <% if @host.os != nil %>
-                <div class="card-text text-center ">Operatin system: <%=  @host.os %> </div>
+              <% if !@remote_action.script %>
+                <div class="card-body">
+                  <div class="form-group">
+                    <textarea class="form-control rounded-5" id="exampleFormControlTextarea1 " rows="1"><%=  @remote_action.command_or_script %></textarea>
+                  </div>
+                <%else%>
+                  <div class="card-body">
+                    <div class="form-group">
+                      <textarea class="form-control rounded-5" id="exampleFormControlTextarea1" rows="20" ><%=  @remote_action.command_or_script %></textarea>
+                  </div>
+                <%end%>
+
+              <%else%>
+                <% if !@remote_action.script %>
+                  <div class="card-body">
+                    <div class="form-group">
+                      <textarea class="form-control rounded-5" id="exampleFormControlTextarea1" rows="1" readonly><%=  @remote_action.command_or_script %></textarea>
+                  </div>
+                <%else%>
+                  <div class="card-body">
+                    <div class="form-group">
+                      <textarea class="form-control rounded-5" id="exampleFormControlTextarea1 formControlReadonly" rows="20" readonly><%=  @remote_action.command_or_script %></textarea>
+                  </div>
+              <%end%>
+
+            <% end %>       
+
+              <% if @current_user == User.find(@remote_action.user_id) || @current_user.admin == true %>
+                <%= link_to "Edit", edit_remote_action_path(@remote_action), class: "btn btn-outline-info" %>
+                <%= link_to "Delete", remote_action_path(@remote_action), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
               <% end %>
-
-
-
-              <% if @current_user == User.find(@host.user_id) || @current_user.admin == true %>
-              
-                <%= link_to "Test connection", test_connection_path(@host.id), method: :post, params[:host_id] => @host.id, class: "btn btn-outline-info" %>
-                <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info" %>
-                <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
-              <% end %>
+              <%= link_to "Back", remote_actions_path, class: "btn btn-outline-warning" %>
             </div>
 
             <div class="card-footer text-muted">
-              <small>Created <%= time_ago_in_words(@host.created_at) %> ago, 
-              edited <%= time_ago_in_words(@host.updated_at) %> ago</small>
+              <small>Created <%= time_ago_in_words(@remote_action.created_at) %> ago, 
+              edited <%= time_ago_in_words(@remote_action.updated_at) %> ago</small>
             </div>
           </div>
         </div>

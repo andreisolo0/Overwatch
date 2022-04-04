@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-    has_many :hosts, :remote_actions
+    has_many :hosts
+    has_many :remote_actions
 
     validates :username, presence: true, 
                          uniqueness: { case_sensitive: false }, 

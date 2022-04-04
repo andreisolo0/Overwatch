@@ -14,4 +14,6 @@ module ApplicationHelper
     #    !!current_user 
     #end
     # moved to application_controller as helper_method
+
+
 end

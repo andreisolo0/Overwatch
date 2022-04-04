@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'forbidden' , to: 'pages#forbidden'
   #resources :actions, only: %i[index]
   post 'test_connection', to: 'remote_actions#test_connection'
+  post 'test_dropdown', to: 'remote_actions#test_dropdown'
   resources :items
   resources :remote_actions
 end

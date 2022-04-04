@@ -21,6 +21,7 @@ class RemoteActionsController < ApplicationController
     end
 
     def edit
+
     end
 
     def update
@@ -39,6 +40,7 @@ class RemoteActionsController < ApplicationController
 
 
     def show
+
     end
 
     
@@ -46,10 +48,11 @@ class RemoteActionsController < ApplicationController
     
         @remote_action.destroy
         redirect_to remote_actions_path
-      end
+    end
 
     
-      def test_connection
+    def test_connection
+        
         host = Host.find(params[:format])
         
         begin
@@ -57,6 +60,7 @@ class RemoteActionsController < ApplicationController
                 # 'ssh' is an instance of Net::SSH::Connection::Session
                 #ssh.exec! "echo 'Test with arguments' > /home/pi/ssh_test
                 #    ssh.exec! "echo 'Test with arguments' > /home/pi/ssh_test" @actions.script_content
+                #ssh.exec! "echo 'Test new post' > /home/overwatch/ssh_test" #@actions.script_content
             end
         rescue Net::SSH::AuthenticationFailed
             flash[:warn] = "SSH authentiction failed. Check credentials!"
@@ -69,28 +73,29 @@ class RemoteActionsController < ApplicationController
     end
 
     def test_dropdown
-        host = Host.find(params[:format])
         
+        host = Host.find(params[:host_id])
+        action = RemoteAction.find(params[:remote_action_id])
         begin
             Net::SSH.start(host.ip_address_or_fqdn, host.user_to_connect, :password => host.password, :port => host.ssh_port, non_interactive: true) do |ssh|
                 # 'ssh' is an instance of Net::SSH::Connection::Session
                 #ssh.exec! "echo 'Test with arguments' > /home/pi/ssh_test
-                ssh.exec! @remote_actions.script_content
+                #    ssh.exec! "echo 'Test with arguments' > /home/pi/ssh_test" @actions.script_content
+                flash[:notice] = "Command returned: " + (ssh.exec! action.command_or_script) #@actions.script_content
+                
             end
         rescue Net::SSH::AuthenticationFailed
             flash[:warn] = "SSH authentiction failed. Check credentials!"
         rescue Errno::ECONNREFUSED
             flash[:warn] = "SSH connection refused"
-        else
-            flash[:notice] = "Connection succesfully"
+        
         end
-        redirect_to host
+        redirect_to action
     end
-
     
     private
     def remote_action_params
-        params.require(remote_action).permit(:action_name, :command_or_script, :path_to_script, :script)
+        params.require(:remote_action).permit(:action_name, :command_or_script, :path_to_script, :script)
     end
 
     def permit_edit_own_action_or_admin
