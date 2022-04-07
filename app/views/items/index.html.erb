@@ -10,7 +10,6 @@
           <th class="text-center" scope="col">Hostname</th>
           <th class="text-center" scope="col">IP/FQDN</th>
           <th class="text-center" scope="col">Owner</th>
-          <th class="text-center" scope="col">Status</th>
           <th class="text-center" scope="col">Actions</th>
        
         </tr>
@@ -22,13 +21,6 @@
               <td ><%= host.hostname %></td>
               <td ><%= host.ip_address_or_fqdn %></td>
               <td ><%= User.find_by(id: host.user_id).username %></td>
-              <td >
-                <% if host.online? %>
-                  <span class="badge badge-success">Online</span>
-                <% else %>
-                  <span class="badge badge-danger">Offline</span>
-                <% end %>
-              </td>
               <td>
               <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
               <% if @current_user.id == host.user_id || @current_user.admin == true %>

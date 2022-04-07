@@ -1,0 +1,2 @@
+class HostItemsController < ApplicationController
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_04_123232) do
+ActiveRecord::Schema.define(version: 2022_04_07_212453) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(version: 2022_04_04_123232) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "description"
     t.integer "user_id"
+  end
+
+  create_table "host_items", force: :cascade do |t|
+    t.integer "host_id", null: false
+    t.integer "item_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "value"
+    t.index ["host_id"], name: "index_host_items_on_host_id"
+    t.index ["item_id"], name: "index_host_items_on_item_id"
   end
 
   create_table "hosts", force: :cascade do |t|
@@ -35,11 +45,10 @@ ActiveRecord::Schema.define(version: 2022_04_04_123232) do
 
   create_table "items", force: :cascade do |t|
     t.string "item_name"
-    t.string "value"
     t.string "interval_to_read"
-    t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "command_to_read"
   end
 
   create_table "remote_actions", force: :cascade do |t|
@@ -50,6 +59,7 @@ ActiveRecord::Schema.define(version: 2022_04_04_123232) do
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "result_of_command"
   end
 
   create_table "users", force: :cascade do |t|
@@ -65,4 +75,6 @@ ActiveRecord::Schema.define(version: 2022_04_04_123232) do
     t.string "last_name"
   end
 
+  add_foreign_key "host_items", "hosts"
+  add_foreign_key "host_items", "items"
 end

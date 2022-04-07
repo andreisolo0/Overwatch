@@ -27,7 +27,7 @@
                 <%= form.select :action_id , RemoteAction.where(user_id: @host.user_id).collect { |p| [  p.action_name , p.id] } %>
                 <%= form.submit "Run" %>
               <%end%>
--->             
+-->              
               <% if @current_user == User.find(@host.user_id) || @current_user.admin == true %>
                 <%= link_to "Test connection", test_connection_path(@host.id), method: :post, class: "btn btn-outline-info" %>
                 <br>

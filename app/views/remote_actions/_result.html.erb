@@ -1,0 +1,16 @@
+<div id="messages-content_js">
+  
+    <% flash.each do |name, msg| %>
+      <div class="alert alert-<%= name == "notice" ? "success" : "danger" %> alert-dismissible fade show" role="alert">
+        <%= msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <% end %> 
+
+</div>
+
+<% if @message %>
+    <textarea class="form-control rounded-5" id="exampleFormControlTextarea1 " rows="3"><%=  @message %></textarea>
+<% end %>

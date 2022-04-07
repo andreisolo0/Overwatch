@@ -7,39 +7,40 @@
           <div class="card text-center shadow mb-5 bg-white rounded">
             <% if @current_user == User.find(@remote_action.user_id) || @current_user.admin == true %>
             <p>Apply on host:</p>
-            <%= form_with(url: test_dropdown_path(:host_id, @remote_action.id), method: :post) do |form| %> 
-              <!-- send :id as params and list the name -->
+            <!--local: false enables javascript-->
+            <%= form_with url: apply_remote_action_path, method: :get, local: false do  |form| %> 
+                <!-- send :id as params and list the hostnames -->
                 <%= form.select :host_id , Host.where(user_id: current_user).collect { |p| [  p.hostname , p.id] } %>
-                <!--add hiddent field tag to add extra parameter to params hash-->
-                <%= hidden_field_tag(:remote_action_id, @remote_action.id) %>
-                <%= form.submit "Apply" %>
-              <%end%>
-
-
-              <% if !@remote_action.script %>
-                <div class="card-body">
-                  <div class="form-group">
-                    <textarea class="form-control rounded-5" id="exampleFormControlTextarea1 " rows="1"><%=  @remote_action.command_or_script %></textarea>
-                  </div>
-                <%else%>
-                  <div class="card-body">
-                    <div class="form-group">
-                      <textarea class="form-control rounded-5" id="exampleFormControlTextarea1" rows="20" ><%=  @remote_action.command_or_script %></textarea>
-                  </div>
+                  <!--add hiddent field tag to add extra parameter to params hash-->
+                  <%= hidden_field_tag(:remote_action_id, @remote_action.id) %>
+                  <%= form.submit "Apply" %>
                 <%end%>
+                <div id="results"></div>
+                <!--<%= render 'remote_actions/result' %> -->
 
-              <%else%>
                 <% if !@remote_action.script %>
                   <div class="card-body">
                     <div class="form-group">
-                      <textarea class="form-control rounded-5" id="exampleFormControlTextarea1" rows="1" readonly><%=  @remote_action.command_or_script %></textarea>
-                  </div>
-                <%else%>
-                  <div class="card-body">
-                    <div class="form-group">
-                      <textarea class="form-control rounded-5" id="exampleFormControlTextarea1 formControlReadonly" rows="20" readonly><%=  @remote_action.command_or_script %></textarea>
-                  </div>
-              <%end%>
+                      <textarea class="form-control rounded-5 code-bg" id="exampleFormControlTextarea1 " rows="1"><%=  @remote_action.command_or_script %></textarea>
+                    </div>
+                  <%else%>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <textarea class="form-control rounded-5 code-bg" id="exampleFormControlTextarea1" rows="20" ><%=  @remote_action.command_or_script %></textarea>
+                    </div>
+                  <%end%>
+              <%else%>
+                  <% if !@remote_action.script %>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <textarea class="form-control rounded-5 code-bg" id="exampleFormControlTextarea1" rows="1" readonly><%=  @remote_action.command_or_script %></textarea>
+                    </div>
+                  <%else%>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <textarea class="form-control rounded-5 code-bg" id="exampleFormControlTextarea1 formControlReadonly" rows="20" readonly><%=  @remote_action.command_or_script %></textarea>
+                    </div>
+                <%end%>
 
             <% end %>       
 

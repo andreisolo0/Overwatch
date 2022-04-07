@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :host_items
   resources :articles
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'pages#home'
@@ -15,7 +16,8 @@ Rails.application.routes.draw do
   get 'forbidden' , to: 'pages#forbidden'
   #resources :actions, only: %i[index]
   post 'test_connection', to: 'remote_actions#test_connection'
-  post 'test_dropdown', to: 'remote_actions#test_dropdown'
+  #post 'apply_remote_action', to: 'remote_actions#apply_remote_action'
+  get 'apply_remote_action', to: 'remote_actions#apply_remote_action'
   resources :items
   resources :remote_actions
 end

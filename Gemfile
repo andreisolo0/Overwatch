@@ -23,7 +23,12 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
  gem 'bcrypt', '~> 3.1.7'
  gem 'will_paginate', '~> 3.1.0'
+ # Gem for ssh connection
  gem 'net-ssh'
+#Gem for ping
+gem 'net-ping'
+#Gem for telnet
+gem 'net-telnet'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

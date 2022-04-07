@@ -72,25 +72,38 @@ class RemoteActionsController < ApplicationController
         redirect_to host
     end
 
-    def test_dropdown
+    def apply_remote_action
         
-        host = Host.find(params[:host_id])
-        action = RemoteAction.find(params[:remote_action_id])
+        @host = Host.find(params[:host_id])
+        @remote_action = RemoteAction.find(params[:remote_action_id])
         begin
-            Net::SSH.start(host.ip_address_or_fqdn, host.user_to_connect, :password => host.password, :port => host.ssh_port, non_interactive: true) do |ssh|
-                # 'ssh' is an instance of Net::SSH::Connection::Session
-                #ssh.exec! "echo 'Test with arguments' > /home/pi/ssh_test
-                #    ssh.exec! "echo 'Test with arguments' > /home/pi/ssh_test" @actions.script_content
-                flash[:notice] = "Command returned: " + (ssh.exec! action.command_or_script) #@actions.script_content
-                
+            Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
+                @message = "Command \"#{@remote_action.action_name}\" returned:\n" + (ssh.exec! @remote_action.command_or_script) #@actions.script_content
+                respond_to do |format|
+                    format.js { render partial: 'remote_actions/result' }
+                end
             end
         rescue Net::SSH::AuthenticationFailed
-            flash[:warn] = "SSH authentiction failed. Check credentials!"
+            respond_to do |format|
+                flash.now[:alert] = "SSH authentiction failed. Check credentials!"
+                format.js { render partial: 'remote_actions/result' }
+            end
+
         rescue Errno::ECONNREFUSED
-            flash[:warn] = "SSH connection refused"
-        
+            respond_to do |format|
+                flash.now[:alert] = "SSH connection refused"
+                format.js { render partial: 'remote_actions/result' }
+            end
+        rescue Errno::EHOSTUNREACH
+            respond_to do |format|
+                flash.now[:alert] = "Host unreachable - No route to host"
+                format.js { render partial: 'remote_actions/result' }
+            end
         end
-        redirect_to action
+        
+        #redirect_to @action #this keeps the same page but shows warn
+        #render "remote_actions/show" #this renders the show view of remote_actions with the @message var 
+      
     end
     
     private
