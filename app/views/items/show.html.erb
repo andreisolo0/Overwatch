@@ -1,45 +1,28 @@
 <div id="page-content">
   
-  <h2 class="text-center mt-4"><img src="<%= asset_path('host_icon.png') %>" class="img-fluid mx-auto d-block" width="90" 
-    height="80"><%= @host.hostname %></h2>
-  
+  <h2 class="text-center mt-4"><%= @item.item_name %></h2>
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-8 mt-4">
           <div class="card text-center shadow mb-5 bg-white rounded">
-
             <div class="card-body">
-              <div class="card-text text-center font-weight-bold ">IP/FQDN: <%=  @host.ip_address_or_fqdn %> </div>
-              <div class="card-text text-center font-weight-bold ">Owned by: <%=  User.find(@host.user_id).username %> </div>
 
-              <div class="card-text text-center ">SSH user to connect: <%=  @host.user_to_connect%> </div>
-              <div class="card-text text-center ">SSH port: <%=  @host.ssh_port %> </div>
-              <div class="card-text text-center ">Run as sudo: <%=  @host.run_as_sudo %> </div>
-              <% if @host.os != nil %>
-                <div class="card-text text-center ">Operating system: <%=  @host.os %> </div>
-              <% end %>
-<!--
-              <% actions_array =[] %>
-              <% RemoteAction.where(user_id: @host.user_id).ids.each { |n|   actions_array.append(RemoteAction.find(n).action_name) } %>
--->
-<!--              <%= form_with(url: apply_remote_action_path(:action_id,:host_id), method: :post, params: {format: @host_id}) do |form| %> 
-                            send :id as params and list the name 
-                <%= form.select :action_id , RemoteAction.where(user_id: @host.user_id).collect { |p| [  p.action_name , p.id] } %>
-                <%= form.submit "Run" %>
-              <%end%>
--->              
-              <% if @current_user == User.find(@host.user_id) || @current_user.admin == true %>
-                <%= link_to "Test connection", test_connection_path(@host.id), method: :post, class: "btn btn-outline-info" %>
-                <br>
-                <br>
-                <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info" %>
-                <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
-              <% end %>
+              <div class="card-text text-center font-weight-bold ">Command to get </div>
+              <div class="form-group">
+                <textarea class="form-control rounded-5 " id="exampleFormControlTextarea1" rows="1" readonly><%=  @item.command_to_read %></textarea>
+              </div>
+              <div class="card-text text-center font-weight-bold ">Interval to run:  <%=  @item.interval_to_read %></div>
+              
+
+              <%= link_to "Edit", edit_item_path(@item), class: "btn btn-outline-info" %>
+              <%= link_to "Delete", item_path(@item), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+              
+              <%= link_to "Back", items_path, class: "btn btn-outline-warning" %>
             </div>
 
             <div class="card-footer text-muted">
-              <small>Created <%= time_ago_in_words(@host.created_at) %> ago, 
-              edited <%= time_ago_in_words(@host.updated_at) %> ago</small>
+              <small>Created <%= time_ago_in_words(@item.created_at) %> ago, 
+              edited <%= time_ago_in_words(@item.updated_at) %> ago</small>
             </div>
           </div>
         </div>

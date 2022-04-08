@@ -1,8 +1,12 @@
 class HostsController < ApplicationController
     before_action :require_user
-    before_action :set_host, only: %i[ show edit update destroy ]
+    before_action :set_host, only: %i[ show edit update destroy assigned_items]
     before_action :permit_edit_own_host_or_admin, only: [:edit, :update, :destroy]
     
+    def assigned_items
+        @items = @host.items
+    end
+
     def new
         @host = Host.new
     end
@@ -21,6 +25,7 @@ class HostsController < ApplicationController
 
     def edit
         #@host = Host.find(params[:id])
+        
     end
 
     def update
@@ -42,6 +47,7 @@ class HostsController < ApplicationController
 
     def show
         #@host = Host.find(params[:id])
+        assigned_items
     end
 
     

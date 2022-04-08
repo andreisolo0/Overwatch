@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_07_212453) do
+ActiveRecord::Schema.define(version: 2022_04_08_142305) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2022_04_07_212453) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "command_to_read"
+    t.text "description"
   end
 
   create_table "remote_actions", force: :cascade do |t|

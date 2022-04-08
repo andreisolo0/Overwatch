@@ -1,40 +1,38 @@
 <div id="page-content">
-    <h2 class="text-center mt-4 " id="page-title">Hosts</h2>
-    
-    <%= render 'shared/pagination', obj: @hosts %>
+  <h2 class="text-center mt-4 " id="page-title">Items</h2>
+  
+  <%= render 'shared/pagination', obj: @items %>
 
-    <table class="table table-sm table-dark table-bordered ">
-      <thead>
-        <tr>
-          
-          <th class="text-center" scope="col">Hostname</th>
-          <th class="text-center" scope="col">IP/FQDN</th>
-          <th class="text-center" scope="col">Owner</th>
-          <th class="text-center" scope="col">Actions</th>
-       
-        </tr>
-      </thead>
-      <tbody class="text-center">
-        <% @hosts.each do |host| %>
-          
-            <tr>
-              <td ><%= host.hostname %></td>
-              <td ><%= host.ip_address_or_fqdn %></td>
-              <td ><%= User.find_by(id: host.user_id).username %></td>
-              <td>
-              <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
-              <% if @current_user.id == host.user_id || @current_user.admin == true %>
-                <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
-                <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
-              <% end %>
-              </td>
-            </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <%= render 'shared/pagination', obj: @hosts %>
-    <div class="text-center">
-    <%= link_to 'Create', new_host_path, class: "btn btn-success text-white" %>
-    <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
-    </div>
-    </div>
+  <table class="table table-sm table-dark table-bordered ">
+    <thead>
+      <tr>
+        
+        <th class="text-center" scope="col">Item name</th>
+        <th class="text-center" scope="col">Command to read</th>
+        <th class="text-center" scope="col">Interval</th>
+        <th class="text-center" scope="col">Actions</th>
+     
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <% @items.each do |item| %>
+        
+          <tr>
+            <td ><%= item.item_name %></td>
+            <td ><%= item.command_to_read %></td>
+            <td ><%= item.interval_to_read %></td>
+            <td>
+            <%= link_to 'View', item_path(item) , class: "btn btn-outline-success text-white" %>
+            <%= link_to 'Edit', edit_item_path(item), class: "btn btn-outline-warning text-white"%>
+            <%= link_to 'Delete', item, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+item.item_name+'?' } %>
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render 'shared/pagination', obj: @items %>
+  <div class="text-center">
+  <%= link_to 'Create', new_item_path, class: "btn btn-success text-white" %>
+  <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
+  </div>
+  </div>
