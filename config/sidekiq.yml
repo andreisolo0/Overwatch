@@ -1,0 +1,5 @@
+#Config
+:dynamic: true
+:dynamic_every: 15 #<if dynamic is true, the schedule is reloaded every interval [5s by default]>
+:enabled: true #<enables scheduler if true [true by default]>
+

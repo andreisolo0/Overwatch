@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :host_items, only: [:create, :destroy]
+  post 'schedule_collector_job', to: 'host_items#schedule_collector_job'
   resources :articles
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'pages#home'
@@ -15,7 +16,7 @@ Rails.application.routes.draw do
   delete 'logout' , to: 'sessions#destroy'
   get 'forbidden' , to: 'pages#forbidden'
   #resources :actions, only: %i[index]
-  post 'test_connection', to: 'remote_actions#test_connection'
+  get 'test_connection', to: 'remote_actions#test_connection'
   #post 'apply_remote_action', to: 'remote_actions#apply_remote_action'
   get 'apply_remote_action', to: 'remote_actions#apply_remote_action'
   resources :items

@@ -63,8 +63,11 @@ class RemoteActionsController < ApplicationController
             flash[:warn] = "SSH authentiction failed. Check credentials!"
         rescue Errno::ECONNREFUSED
             flash[:warn] = "SSH connection refused"
+        rescue Errno::EHOSTUNREACH
+            @error = "Host unreacheable - no route to host"
         else
             flash[:notice] = "Connection succesfully"
+        
         end
         redirect_to host
     end

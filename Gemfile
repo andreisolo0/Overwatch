@@ -29,6 +29,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'net-ping'
 #Gem for telnet
 gem 'net-telnet'
+gem 'sidekiq'
+gem 'sidekiq-scheduler'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
