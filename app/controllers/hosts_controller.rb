@@ -14,8 +14,12 @@ class HostsController < ApplicationController
     def create
         @host = Host.new(host_params)
         @host.user = current_user
+        
         if @host.save
             flash[:notice] = "#{@host.hostname} created"
+            # Add job for ping on each host creation
+            Sidekiq.set_schedule('Ping job for '+ @host.ip_address_or_fqdn, { 'every' => ['1m'], 'class' => 'PingJob', 'args' => [@host.id]})
+            # Save job to file schedule to be loaded in case of server restart
             redirect_to hosts_path
         else
             render 'new'

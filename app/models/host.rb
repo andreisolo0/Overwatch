@@ -4,8 +4,8 @@ class Host < ApplicationRecord
     has_many :items, through: :host_items
     
     def online?
-        check = Net::Ping::External.new(self.ip_address_or_fqdn, count = 1)
-        check.ping?
+        Host.find(self.id).online
+        # read the online status from the host table
     end
 
     #def ssh_available?

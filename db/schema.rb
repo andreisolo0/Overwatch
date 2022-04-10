@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_142305) do
+ActiveRecord::Schema.define(version: 2022_04_10_142527) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -21,8 +24,8 @@ ActiveRecord::Schema.define(version: 2022_04_08_142305) do
   end
 
   create_table "host_items", force: :cascade do |t|
-    t.integer "host_id", null: false
-    t.integer "item_id", null: false
+    t.bigint "host_id", null: false
+    t.bigint "item_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "value"
@@ -41,6 +44,8 @@ ActiveRecord::Schema.define(version: 2022_04_08_142305) do
     t.integer "ssh_port"
     t.boolean "run_as_sudo"
     t.string "os"
+    t.boolean "online"
+    t.integer "assigned_items_host", default: [], array: true
   end
 
   create_table "items", force: :cascade do |t|
