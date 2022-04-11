@@ -43,8 +43,12 @@ class ItemsController < ApplicationController
     end
 
     
-    def destroy    
-        @item.destroy
+    def destroy
+        if(HostItem.where(item_id: @item.id).count > 0)
+            flash[:alert]= "Item #{@item.item_name} is assigned to a host and cannot be deleted"
+        else
+            @item.destroy
+        end
         redirect_to items_path
       end
     

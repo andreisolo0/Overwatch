@@ -39,21 +39,20 @@ class HostItemsController < ApplicationController
 
 
     def schedule_collector_job
-        #GetItemJob.perform_async(params[:host_id],params[:item_id])
+        
         # Set a schedule for the item to be read for each host
         job_name="job_for_item_"+ params[:item_id]+"_on_host_"+params[:host_id]
         run_interval = Item.find(params[:item_id]).interval_to_read
-        Sidekiq.set_schedule(job_name, { 'every' => [run_interval+"m"], 'class' => 'ScheduleItemJob', 'args' => [params[:host_id],params[:item_id]] })
+        #No longer needed since we have a file which is loaded on server start and reloads every periodically
+        #Use this to schedule one time and not persist after restart
+        #Sidekiq.set_schedule(job_name, { 'every' => [run_interval+"m"], 'class' => 'ScheduleItemJob', 'args' => [params[:host_id],params[:item_id]] })
 
         # To persist the schedule even after a sidekiq restart we need to save the schedule to a file
-        #scheduler = File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'))
         scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
-        #scheduler_data = scheduler_data[:schedule]
-        #byebug
+        
         if scheduler_data.include?(job_name) == false
             scheduler_data[job_name] = { 'every' => [run_interval+"m"], 'class' => 'ScheduleItemJob', 'args' => [params[:host_id],params[:item_id]] }
             File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
-                #byebug
                 f.write(YAML.dump(scheduler_data))
             end
         end
@@ -64,11 +63,21 @@ class HostItemsController < ApplicationController
 
     def destroy
         @host = Host.find(params[:id])
+        # Destroy all item values for this host
         HostItem.destroy_by(host_id: params[:id], item_id: params[:item_id])
+        # Update assigned_items_host column for this host
         assigned_now = @host.assigned_items_host
         assigned_now.delete(params[:item_id].to_i)
-        
         Host.find(params[:id]).update(assigned_items_host: assigned_now)
+        # Open scheduler to remove the job
+        scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
+        job_name="job_for_item_"+ params[:item_id]+"_on_host_"+@host.id.to_s
+        scheduler_data.delete(job_name)
+        File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
+            f.write(YAML.dump(scheduler_data))
+        end
+        
+        flash[:notice]="The item values and related jobs were removed"
         redirect_to @host
     end
 

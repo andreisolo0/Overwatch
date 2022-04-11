@@ -11,10 +11,10 @@ job_for_item_1_on_host_1:
   args:
   - '1'
   - '1'
-job_for_item_2_on_host_1:
+job_for_item_3_on_host_1:
   every:
-  - 10m
+  - 5m
   class: ScheduleItemJob
   args:
   - '1'
-  - '2'
+  - '3'

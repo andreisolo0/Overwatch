@@ -42,9 +42,9 @@
                   <%= form.submit "Add new item" %>
                 <%end%>
               
-              <% if !assigned_items_for_current_host(@host.id).blank?%>
+              <% if !jobs_to_schedule(@host.id).blank?%>
                 <%= form_with url: schedule_collector_job_path, method: :post do  |form| %> 
-                  <%= form.select :item_id , (assigned_items_for_current_host(@host.id).collect{ |p| [p[1],p[0]] }) %>
+                  <%= form.select :item_id , (jobs_to_schedule(@host.id).collect{ |p| [p[1],p[0]] }) %>
                     <%= hidden_field_tag(:host_id, @host.id) %>
                     <%= form.submit "Create job for item" %>
                 <%end%>
@@ -55,6 +55,8 @@
               <thead class="table-info">
                 <tr>
                   <th scope="col">Item name</th>
+                  <th scope="col"></th>
+                  <th scope="col">Job</th>
                   <th scope="col"></th>
                   <th scope="col">Last value</th>
                   <th scope="col"></th>
@@ -68,7 +70,16 @@
                     <% all_items.each do |item| %>
                       <% if !HostItem.where(host_id: @host.id, item_id: item.id).blank? %>
                          <tr>
-                          <th scope="row"><%= item.item_name %></th>
+                          <th scope="row"><%= item.item_name %>           
+                          </th>
+                          <td></td>
+                          <td>
+                          <% if jobs_scheduled?(@host.id,item.id) %>
+                            <span class="badge badge-pill badge-success">Yes</span>
+                          <%else%>
+                            <span class="badge badge-pill badge-danger">No</span>
+                          <%end%></td>
+                          
                           <td></td>
                           <td ><%= HostItem.where(host_id: @host.id, item_id: item.id).last.value %></td>
                           <td></td>
@@ -83,12 +94,12 @@
             </div>
               <%end%>
               <% if @current_user == User.find(@host.user_id) || @current_user.admin == true %>
-                <%= link_to "Test connection", test_connection_path(@host.id), method: :get, class: "btn btn-outline-info" %> 
+                <%= link_to "Test connection", test_connection_path(@host.id), method: :get, class: "btn btn-outline-success" %> 
                 <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info" %>
                 <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
               <% end %>
             </div>
-
+            
             <div class="card-footer text-muted">
               <small>Created <%= time_ago_in_words(@host.created_at) %> ago, 
               edited <%= time_ago_in_words(@host.updated_at) %> ago</small>
