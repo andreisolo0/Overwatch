@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get 'test_connection', to: 'remote_actions#test_connection'
   #post 'apply_remote_action', to: 'remote_actions#apply_remote_action'
   get 'apply_remote_action', to: 'remote_actions#apply_remote_action'
+  get 'unassign_items', to: 'items#unassign_items'
   resources :items
   resources :remote_actions
 end

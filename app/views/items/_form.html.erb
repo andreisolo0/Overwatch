@@ -10,6 +10,7 @@
                 </div>
             </div>
             
+            
             <div class="form-group row-20">
               <strong><%= form.label "Command to read" , class: "col-20 col-form-label text-inline"%></strong>
                 <div class="col-20">
@@ -29,7 +30,7 @@
             <div class="form-group row-20">
             <strong><%= form.label "Interval to read(minutes)" , class: "col-20 col-form-label"%></strong>
                 <div class="col-20">
-                <%= form.text_field :interval_to_read ,class: "form-control form-control-sm" , placeholder: "Interval to read value",  type: "number", min: "0", value:"0"%>
+                <%= form.text_field :interval_to_read ,class: "form-control form-control-sm" , placeholder: "Interval to read value",  type: "number", min: "0", value:@item.interval_to_read %>
                 </div>
             </div>
       

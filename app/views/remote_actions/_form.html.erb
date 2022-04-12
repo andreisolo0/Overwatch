@@ -9,28 +9,52 @@
                   <%= form.text_field :action_name , class: "form-control form-control-sm", placeholder: "Your action name"%>
                 </div>
             </div>
+
             
+
             <div class="form-group row-20">
   
               <strong><%= form.label :command_or_script , class: "col-20 col-form-label"%></strong>
-                <div class="col-20">
-                <%= form.text_area :command_or_script ,class: "form-control ", placeholder: "Command or script to execute"%>
+                <div class="col-20 ">
+                  <%= form.text_area :command_or_script ,class: "form-control rounded-5 code-bg", placeholder: "Command or script to execute"%>
               </div>
             </div>
-            <div style = "position:relative; left:20px; bottom:5px">
-              <%= form.check_box :script, class: "form-check-input" %>
-              <strong><%= form.label "Script" , class: "form-check-label" %></strong>
+            <div   style="position:relative; left:20px; bottom:5px">
+              <%= form.check_box :script ,id: "script_checkbox", class: "form-check-input" %>
+              <strong><%= form.label :script , class: "form-check-label"  %></strong>
             </div>
 
-            <div class="form-group row-20">
-            <strong><%= form.label :path_to_script , class: "col-20 col-form-label"%></strong>
-                <div class="col-20">
-                <%= form.text_field :path_to_script ,class: "form-control form-control-sm" , placeholder: "Path to create the script"%>
-                </div>
+          
+            <div class="script_path_textbox">
+              <div class="form-group row-20" >
+              <strong><%= form.label :path_to_script , class: "col-20 col-form-label"%></strong>
+                  <div class="col-20">
+                  <%= form.text_field :path_to_script ,class: "form-control form-control-sm" , placeholder: "Path to create the script"%>
+                  </div>
               </div>
+            </div>
+
+              <script type="text/javascript">
+                //initial state 
+                //.script_path_textbox is a class on the div for textbox
+                //#script_checkbox is an id for the checkbox
+                //jquery
+                if ($("#script_checkbox").is(':checked')) {
+                      $(".script_path_textbox").show();
+                  } else {
+                      $(".script_path_textbox").hide();
+                  }
+                $("#script_checkbox").click(function(){
+                  if ($("#script_checkbox").is(':checked')) {
+                      $(".script_path_textbox").show();
+                  } else {
+                      $(".script_path_textbox").hide();
+                  }
+                  
+                });
+              </script>
+
       
-
-
         <div class="actions text-center" >
           <%= form.submit(@remote_action.new_record? ? "Add new" : "Update", class: "btn btn-success")%>
     

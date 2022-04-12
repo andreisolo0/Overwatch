@@ -2,7 +2,13 @@
   
   <h2 class="text-center mt-4"><img src="<%= asset_path('host_icon.png') %>" class="img-fluid mx-auto d-block" width="90" 
     height="80"><%= @host.hostname %></h2>
-  
+    <h4 class="text-center mt-8" >
+    <% if @host.online? %>
+        <span class="badge badge-success">Online</span>
+    <% else %>
+        <span class="badge badge-danger">Offline</span>
+    <% end %>
+    </h4>
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-8 mt-4">
