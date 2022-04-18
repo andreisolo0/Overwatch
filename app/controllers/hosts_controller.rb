@@ -18,8 +18,18 @@ class HostsController < ApplicationController
         if @host.save
             flash[:notice] = "#{@host.hostname} created"
             # Add job for ping on each host creation
-            Sidekiq.set_schedule('Ping job for '+ @host.ip_address_or_fqdn, { 'every' => ['1m'], 'class' => 'PingJob', 'args' => [@host.id]})
             # Save job to file schedule to be loaded in case of server restart
+            job_name="ping_#{@host.hostname}"
+            run_interval = '1m'
+            scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
+            if scheduler_data.include?(job_name) == false
+                scheduler_data[job_name] = { 'every' => [run_interval], 'class' => 'PingJob', 'args' => [@host.id] }
+                File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
+                    f.write(YAML.dump(scheduler_data))
+                end
+            end
+
+
             redirect_to hosts_path
         else
             render 'new'
@@ -28,13 +38,30 @@ class HostsController < ApplicationController
     end
 
     def edit
-        #@host = Host.find(params[:id])
         
     end
 
     def update
-        #@host = Host.find(params[:id])
+        
         if @host.update(host_params)
+            if host_params[:autopatch] == "1"
+                job_name="autopatch_#{@host.hostname}"
+                run_interval = '5m'
+                scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
+                if scheduler_data.include?(job_name) == false
+                    scheduler_data[job_name] = { 'every' => [run_interval], 'class' => 'AutopatchJob', 'args' => [@host.id] }
+                    File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
+                        f.write(YAML.dump(scheduler_data))
+                    end
+                end
+            else
+                job_name="autopatch_#{@host.hostname}"
+                scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
+                scheduler_data.delete(job_name)
+                File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
+                    f.write(YAML.dump(scheduler_data))
+                end
+            end
             flash[:notice] = "Host #{@host.hostname} was updated successfully"
             redirect_to @host
        else
@@ -57,7 +84,12 @@ class HostsController < ApplicationController
     
     def destroy
         #No longer needed because we have before_action @article = Article.find(params[:id])
-    
+        scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
+        job_name="ping_#{@host.hostname}"
+        scheduler_data.delete(job_name)
+        File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
+            f.write(YAML.dump(scheduler_data))
+        end
         @host.destroy
         redirect_to hosts_path
       end
@@ -69,7 +101,7 @@ class HostsController < ApplicationController
     private
     def host_params
         #byebug
-        params.require(:host).permit( :ip_address_or_fqdn, :hostname, :user_to_connect, :password, :ssh_port, :run_as_sudo)
+        params.require(:host).permit( :ip_address_or_fqdn, :hostname, :user_to_connect, :password, :ssh_port, :run_as_sudo, :autopatch)
     end
 
     def permit_edit_own_host_or_admin

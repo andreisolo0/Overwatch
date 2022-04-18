@@ -1,7 +1,21 @@
 <div id="page-content">
   
-  <h2 class="text-center mt-4"><img src="<%= asset_path('host_icon.png') %>" class="img-fluid mx-auto d-block" width="90" 
-    height="80"><%= @host.hostname %></h2>
+  <h2 class="text-center mt-4">
+    <%case @host.os.downcase %>
+    <%when /ubuntu*/%>
+      <img src="<%= asset_path('logo-ubuntu.png') %>" class="img-fluid mx-auto d-block" width=10% height=10%>
+    <%when /centos*/%>
+      <img src="<%= asset_path('logo-centos.png') %>" class="img-fluid mx-auto d-block" width=10% height=10%>
+    <%when /windows*/%>
+      <img src="<%= asset_path('logo-windows.png') %>" class="img-fluid mx-auto d-block" width=10% height=10%>
+    <%when /redhat*/%>
+      <img src="<%= asset_path('logo-redhat.png') %>" class="img-fluid mx-auto d-block" width=10% height=10%>
+    <%when /fedora*/%>
+      <img src="<%= asset_path('logo-fedora.png') %>" class="img-fluid mx-auto d-block" width=7% height=7%>
+    <% else %>
+      <img src="<%= asset_path('host_icon.png') %>" class="img-fluid mx-auto d-block" width="50" height="50">
+    <% end %> 
+    <%= @host.hostname %></h2>
     <h4 class="text-center mt-8" >
     <% if @host.online? %>
         <span class="badge badge-success">Online</span>
