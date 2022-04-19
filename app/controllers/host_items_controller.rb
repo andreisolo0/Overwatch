@@ -39,7 +39,6 @@ class HostItemsController < ApplicationController
 
 
     def schedule_collector_job
-        
         # Set a schedule for the item to be read for each host
         job_name="job_for_item_"+ params[:item_id]+"_on_host_"+params[:host_id]
         run_interval = Item.find(params[:item_id]).interval_to_read
@@ -56,9 +55,25 @@ class HostItemsController < ApplicationController
                 f.write(YAML.dump(scheduler_data))
             end
         end
-        
+        Sidekiq.set_schedule(job_name, { 'every' => [run_interval], 'class' => 'ScheduleItemJob', 'args' => [@host.id] })
         flash[:notice]="Job scheduled"
         redirect_to Host.find(params[:host_id])
+    end
+
+    def triggers
+        @host_item = HostItem.find(params[:id])
+        @host = Host.find(@host_item.host_id)
+        @item = Item.find(@host_item.item_id)
+
+    end
+    def update
+        @host_item = HostItem.find(params[:id])
+        @host = Host.find(@host_item.host_id)
+        if @host_item.update(host_item_params)
+            HostItem.where(host_id: @host_item.host_id, item_id: @host_item.item_id).update(threshold_high: @host_item.threshold_high, threshold_warning: @host_item.threshold_warning, threshold_low: @host_item.threshold_low)
+            flash[:notice] = "Triggers set"
+            redirect_to @host
+        end
     end
 
     def destroy
@@ -76,9 +91,13 @@ class HostItemsController < ApplicationController
         File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
             f.write(YAML.dump(scheduler_data))
         end
-        
+        Sidekiq.remove_schedule(job_name)
         flash[:notice]="The item values and related jobs were removed"
         redirect_to @host
     end
-
+    private
+    def host_item_params
+        #byebug
+        params.require(:host_item).permit( :threshold_high, :threshold_warning, :threshold_low)
+    end
 end

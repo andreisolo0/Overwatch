@@ -1,0 +1,39 @@
+<div id="page-content">
+    <h4 class="text-center mt-4">Set trigger value for <%= @item.item_name %> on <%= @host.hostname %> </h4>
+<div class="container-sm " >
+    <%= render 'shared/errors', obj: @host_item %>
+      <div class = "row justify-content-center ">
+        <div class="col-sm-4 row-20 form_container">
+          <%= form_with(model: @host_item) do |form| %>
+            <div class="form-group  row-20 ">
+                <strong><%= form.label :threshold_high , class: "col-20 col-form-label"%></strong>
+                <div class="col-20">
+                  <%= form.text_field :threshold_high , class: "form-control form-control-sm"%>
+                </div>
+            </div>
+            
+            <div class="form-group row-20">
+              
+              <strong><%= form.label :threshold_warning , class: "col-20 col-form-label"%></strong>
+                <div class="col-20">
+                <%= form.text_field :threshold_warning ,class: "form-control form-control-sm"%>
+              </div>
+            </div>
+
+            <div class="form-group row-20">
+            <strong><%= form.label :threshold_low , class: "col-20 col-form-label"%></strong>
+                <div class="col-20">
+                <%= form.text_field :threshold_low ,class: "form-control form-control-sm"%>
+                </div>
+            </div>
+
+        <div class="actions text-center" >
+          <%= form.submit "Set", class: "btn btn-success" %>
+          <%= link_to 'Host', @host , class: "btn btn-primary text-white" %>
+        </div>
+      </div>
+      <% end %>
+      </div>
+    </div>
+
+</div>

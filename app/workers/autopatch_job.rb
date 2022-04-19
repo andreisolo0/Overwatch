@@ -9,25 +9,11 @@ class AutopatchJob
             if @host.run_as_sudo == true
                 case @host.os.downcase
                 when /ubuntu*/
-                    ssh.exec! "sudo unattended-upgrade -d > /home/asolomon/unnatended-upgrade.log"
-                    ssh.exec! "echo 'unattended-upgrade' >> /home/asolomon/unnatended-upgrade.log"
+                    ssh.exec! "sudo unattended-upgrade -d"
                 when /redhat*/ , /centos*/
-                    ssh.exec! "sudo yum update -y"
+                    ssh.exec! "sudo yum update -y --security"
                 when /fedora*/
-                    ssh.exec! "sudo dnf update -y"
-                else
-                    ssh.exec! "touch /home/asolomon/upgrade"
-                end
-            else
-                case @host.os.downcase
-                when /ubuntu*/
-                    ssh.exec! "unattended-upgrade"
-                when /redhat*/ , /centos*/
-                    ssh.exec! "yum update -y"
-                when /fedora*/
-                    ssh.exec! "dnf update -y"
-                else
-                    ssh.exec! "touch /home/asolomon/nonsudo"
+                    ssh.exec! "sudo dnf update -y --security"
                 end
             end
         end

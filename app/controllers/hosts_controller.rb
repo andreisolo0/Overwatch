@@ -28,8 +28,7 @@ class HostsController < ApplicationController
                     f.write(YAML.dump(scheduler_data))
                 end
             end
-
-
+            Sidekiq.set_schedule(job_name, { 'every' => [run_interval], 'class' => 'PingJob', 'args' => [@host.id] })
             redirect_to hosts_path
         else
             render 'new'
@@ -44,9 +43,9 @@ class HostsController < ApplicationController
     def update
         
         if @host.update(host_params)
-            if host_params[:autopatch] == "1"
+            if host_params[:autopatch] == "1" && @host.online == true
                 job_name="autopatch_#{@host.hostname}"
-                run_interval = '5m'
+                run_interval = '1d'
                 scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
                 if scheduler_data.include?(job_name) == false
                     scheduler_data[job_name] = { 'every' => [run_interval], 'class' => 'AutopatchJob', 'args' => [@host.id] }
@@ -54,6 +53,7 @@ class HostsController < ApplicationController
                         f.write(YAML.dump(scheduler_data))
                     end
                 end
+                Sidekiq.set_schedule(job_name, { 'every' => [run_interval], 'class' => 'AutopatchJob', 'args' => [@host.id] })
             else
                 job_name="autopatch_#{@host.hostname}"
                 scheduler_data = YAML.load(File.open(Rails.root.join('config', 'sidekiq_scheduler.yml')))
@@ -61,6 +61,7 @@ class HostsController < ApplicationController
                 File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
                     f.write(YAML.dump(scheduler_data))
                 end
+                Sidekiq.remove_schedule(job_name)
             end
             flash[:notice] = "Host #{@host.hostname} was updated successfully"
             redirect_to @host
@@ -90,6 +91,7 @@ class HostsController < ApplicationController
         File.open(Rails.root.join('config', 'sidekiq_scheduler.yml'), 'w') do |f|
             f.write(YAML.dump(scheduler_data))
         end
+        Sidekiq.remove_schedule(job_name)
         @host.destroy
         redirect_to hosts_path
       end

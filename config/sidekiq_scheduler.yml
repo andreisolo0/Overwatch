@@ -18,9 +18,15 @@ job_for_item_3_on_host_1:
   args:
   - '1'
   - '3'
-ping_test-vm.localhost:
+ping_test-centos.localhost:
   every:
   - 1m
   class: PingJob
   args:
-  - 5
+  - 6
+ping_test-ubuntu.localhost:
+  every:
+  - 1m
+  class: PingJob
+  args:
+  - 7

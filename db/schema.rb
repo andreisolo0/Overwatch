@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_18_124101) do
+ActiveRecord::Schema.define(version: 2022_04_19_143223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "active_alerts", force: :cascade do |t|
+    t.string "host_item_id"
+    t.string "item_id"
+    t.string "threshold"
+    t.string "severity"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "articles", force: :cascade do |t|
     t.string "title"
@@ -29,6 +38,12 @@ ActiveRecord::Schema.define(version: 2022_04_18_124101) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "value"
+    t.string "threshold_high"
+    t.string "threshold_warning"
+    t.string "threshold_low"
+    t.string "active_high_id"
+    t.string "active_warning_id"
+    t.string "active_low_id"
     t.index ["host_id"], name: "index_host_items_on_host_id"
     t.index ["item_id"], name: "index_host_items_on_item_id"
   end

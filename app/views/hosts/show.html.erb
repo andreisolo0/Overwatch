@@ -82,6 +82,7 @@
                   <th scope="col"></th>
                   <th scope="col">Last read</th>
                   <th scope="col"></th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               
@@ -104,6 +105,7 @@
                           <td ><%= HostItem.where(host_id: @host.id, item_id: item.id).last.value %></td>
                           <td></td>
                           <td><%= HostItem.where(host_id: @host.id, item_id: item.id).last.created_at%></td>
+                          <td> <%= link_to "Triggers", triggers_path(id: HostItem.where(host_id: @host.id, item_id: item.id).ids.last), class: "btn btn-sm btn-outline-primary" %></td>
                           <!--We will pass item id to HostItem destroy method so we could indetify all item values and delete all-->
                           <td><%= link_to "x", host_item_path(item_id: item.id), class: "btn-close btn-sm btn-danger", method: :delete, data: {confirm: "This will remove all data collected for this item. Are you sure?"} %></td>
                         </tr>
