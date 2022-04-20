@@ -1,0 +1,3 @@
+class ActiveAlert < ApplicationRecord
+    
+end

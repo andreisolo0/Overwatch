@@ -42,7 +42,12 @@ class HostsController < ApplicationController
 
     def update
         
-        if @host.update(host_params)
+        #Ensure that if password field is empty the password will not be overwritten
+        if @host.update(host_params.except(:password))
+            if !host_params[:password].empty?
+                @host.update(password: host_params[:password])
+            end
+
             if host_params[:autopatch] == "1" && @host.online == true
                 job_name="autopatch_#{@host.hostname}"
                 run_interval = '1d'
