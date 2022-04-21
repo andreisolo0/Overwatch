@@ -39,9 +39,15 @@ job_for_item_1_on_host_6:
   - '1'
 job_for_item_3_on_host_6:
   every:
-  - 1m
+  - 5m
   class: ScheduleItemJob
   args:
   - '6'
   - '3'
-## edit time for each from day to minutes and job_for_item_3_on_host_6: to 5m
+job_for_item_6_on_host_1:
+  every:
+  - 1m
+  class: ScheduleItemJob
+  args:
+  - '1'
+  - '6'

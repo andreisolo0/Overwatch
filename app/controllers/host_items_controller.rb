@@ -66,7 +66,7 @@ class HostItemsController < ApplicationController
         @item = Item.find(@host_item.item_id)
 
     end
-    def update
+    def update 
         @host_item = HostItem.find(params[:id])
         @host = Host.find(@host_item.host_id)
         if @host_item.update(host_item_params)
