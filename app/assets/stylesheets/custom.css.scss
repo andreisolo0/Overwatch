@@ -86,32 +86,88 @@ body {
 }
 
 
-//flash line in table
-@-webkit-keyframes invalid {
+//flash line in table high
+@-webkit-keyframes low {
+    from { background-color: rgb(250, 219, 118); }
+    to { background-color: inherit; }
+}
+@-moz-keyframes low {
+    from { background-color: rgb(250, 219, 118); }
+    to { background-color: inherit; }
+}
+
+@-o-keyframes low {
+    from { background-color: rgb(250, 219, 118); }
+    to { background-color: inherit; }
+}
+@keyframes low {
+    from { background-color: rgb(250, 219, 118); }
+    to { background-color: inherit; }
+}
+
+.low {
+    -webkit-animation: low 1s infinite; /* Safari 4+ */
+    -moz-animation:    low 1s infinite; /* Fx 5+ */
+    -o-animation:      low 1s infinite; /* Opera 12+ */
+    animation:         low 1s infinite; /* IE 10+ */
+    animation-iteration-count: 5;
+    background-color: rgb(250, 219, 118);
+  }
+//flash line in table high
+@-webkit-keyframes high {
     from { background-color: red; }
     to { background-color: inherit; }
 }
-@-moz-keyframes invalid {
+@-moz-keyframes high {
     from { background-color: red; }
     to { background-color: inherit; }
 }
 
-@-o-keyframes invalid {
+@-o-keyframes high {
     from { background-color: red; }
     to { background-color: inherit; }
 }
-@keyframes invalid {
+@keyframes high {
     from { background-color: red; }
     to { background-color: inherit; }
 }
 
-.invalid {
-    -webkit-animation: invalid 1s infinite; /* Safari 4+ */
-    -moz-animation:    invalid 1s infinite; /* Fx 5+ */
-    -o-animation:      invalid 1s infinite; /* Opera 12+ */
-    animation:         invalid 1s infinite; /* IE 10+ */
+.high {
+    -webkit-animation: high 2s; /* Safari 4+ */
+    -moz-animation:    high 2s; /* Fx 5+ */
+    -o-animation:      high 2s; /* Opera 12+ */
+    animation:         high 2s; /* IE 10+ */
+    animation-iteration-count: 5;
+    background-color: red;
   }
 
+//flash line in table high
+@-webkit-keyframes warning {
+    from { background-color: rgb(241, 133, 45); }
+    to { background-color: inherit; }
+}
+@-moz-keyframes warning {
+    from { background-color: rgb(241, 133, 45); }
+    to { background-color: inherit; }
+}
+
+@-o-keyframes warning {
+    from { background-color: rgb(241, 133, 45); }
+    to { background-color: inherit; }
+}
+@keyframes warning {
+    from { background-color: rgb(241, 133, 45); }
+    to { background-color: inherit; }
+}
+
+.warning {
+    -webkit-animation: warning 2s ; /* Safari 4+ */
+    -moz-animation:    warning 2s ; /* Fx 5+ */
+    -o-animation:      warning 2s ; /* Opera 12+ */
+    animation:         warning 2s ; /* IE 10+ */
+    animation-iteration-count: 5;
+    background-color: rgb(241, 133, 45);
+  }
 
 
 
@@ -309,4 +365,16 @@ h6 {
     color:rgb(255, 255, 255);
     font-family: "Lucida Console", "Courier New", monospace;
     font-size: small;
+}
+
+.alert-low {
+    background-color: #f5dcbc;
+    border-color: #fcdcb2;
+    color: #be6c00;
+}
+
+.alert-warning {
+    color: #b84e2e;
+    background-color: #fcc098;
+    border-color: #fcc098;
 }

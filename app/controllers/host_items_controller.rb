@@ -70,8 +70,9 @@ class HostItemsController < ApplicationController
         @host_item = HostItem.find(params[:id])
         @host = Host.find(@host_item.host_id)
         if @host_item.update(host_item_params)
-            HostItem.where(host_id: @host_item.host_id, item_id: @host_item.item_id).update(threshold_high: @host_item.threshold_high, threshold_warning: @host_item.threshold_warning, threshold_low: @host_item.threshold_low)
-            flash[:notice] = "Triggers set"
+            # This might be better handled and check wheter is neccesarilly to update all values from table
+            HostItem.where(host_id: @host_item.host_id, item_id: @host_item.item_id).update(threshold_high: @host_item.threshold_high, threshold_warning: @host_item.threshold_warning, threshold_low: @host_item.threshold_low, alert_name_high: @host_item.alert_name_high, alert_name_warning: @host_item.alert_name_warning, alert_name_low: @host_item.alert_name_low)
+            flash[:notice] = "Triggers & Alerts set"
             redirect_to @host
         end
     end
@@ -98,6 +99,6 @@ class HostItemsController < ApplicationController
     private
     def host_item_params
         #byebug
-        params.require(:host_item).permit( :threshold_high, :threshold_warning, :threshold_low)
+        params.require(:host_item).permit( :threshold_high, :threshold_warning, :threshold_low, :alert_name_high, :alert_name_warning, :alert_name_low)
     end
 end

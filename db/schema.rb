@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_19_143223) do
+ActiveRecord::Schema.define(version: 2022_04_28_150710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,9 @@ ActiveRecord::Schema.define(version: 2022_04_19_143223) do
     t.string "active_high_id"
     t.string "active_warning_id"
     t.string "active_low_id"
+    t.string "alert_name_high"
+    t.string "alert_name_warning"
+    t.string "alert_name_low"
     t.index ["host_id"], name: "index_host_items_on_host_id"
     t.index ["item_id"], name: "index_host_items_on_item_id"
   end

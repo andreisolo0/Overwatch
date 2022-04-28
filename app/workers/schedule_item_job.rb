@@ -29,14 +29,17 @@ class ScheduleItemJob
             host_item.update(active_high_id: @alert.id)
             host_item.update(active_warning_id: nil)
             host_item.update(active_low_id: nil)
+            ActiveAlert.find(active_alert_id).update(host_item_id: host_item.id)
         elsif severity=="warning"
             host_item.update(active_high_id: nil )
             host_item.update(active_warning_id: @alert.id)
             host_item.update(active_low_id: nil)
+            ActiveAlert.find(active_alert_id).update(host_item_id: host_item.id)
         elsif severity=="low"
             host_item.update(active_high_id: nil )
             host_item.update(active_warning_id: nil)
             host_item.update(active_low_id: @alert.id)
+            ActiveAlert.find(active_alert_id).update(host_item_id: host_item.id)
         end
     end
     def perform(*args)
@@ -50,16 +53,22 @@ class ScheduleItemJob
         active_high_id=HostItem.where(host_id: host_id, item_id: item_id).last.active_high_id
         active_warning_id=HostItem.where(host_id: host_id, item_id: item_id).last.active_warning_id
         active_low_id=HostItem.where(host_id: host_id, item_id: item_id).last.active_low_id
+        alert_name_high=HostItem.where(host_id: host_id, item_id: item_id).last.alert_name_high
+        alert_name_warning=HostItem.where(host_id: host_id, item_id: item_id).last.alert_name_warning
+        alert_name_low=HostItem.where(host_id: host_id, item_id: item_id).last.alert_name_low
         #Create entry in HostItem table where all values are stored
         if value[0].nil?
             @host_item = HostItem.create(host: @host, item: @item, value: "ERR:"+value[1], threshold_high: threshold_high,
                  threshold_warning: threshold_warning, threshold_low: threshold_low, active_high_id: active_high_id,
-                 active_warning_id: active_warning_id, active_low_id: active_low_id)
+                 active_warning_id: active_warning_id, active_low_id: active_low_id, alert_name_high: alert_name_high,
+                 alert_name_warning: alert_name_warning,alert_name_low: alert_name_low)
         else
-            value[0] = value[0].gsub("\n","") 
+            value[0] = value[0].gsub("\n","")
+            puts value[0].count("a-zA-Z")
             @host_item = HostItem.create(host: @host, item: @item, value: value[0], threshold_high: threshold_high,
                 threshold_warning: threshold_warning, threshold_low: threshold_low, active_high_id: active_high_id,
-                active_warning_id: active_warning_id, active_low_id: active_low_id)
+                active_warning_id: active_warning_id, active_low_id: active_low_id, alert_name_high: alert_name_high,
+                alert_name_warning: alert_name_warning,alert_name_low: alert_name_low)
             # Check what type of data the retrieved value/treshold is and convert it to float if it's the case
             
             if value[0].count("a-zA-Z") == 0
@@ -67,20 +76,20 @@ class ScheduleItemJob
             else
                 value=value[0]
             end
-
-            if threshold_high.count("a-zA-Z") == 0
+            
+            if !threshold_high.nil? and threshold_high.count("a-zA-Z") == 0
                 threshold_high=threshold_high.to_f
             end
-            if threshold_warning.count("a-zA-Z") == 0
+            if !threshold_warning.nil? and threshold_warning.count("a-zA-Z") == 0
                 threshold_warning=threshold_warning.to_f
             end
-            if threshold_low.count("a-zA-Z") == 0
+            if !threshold_low.nil? and threshold_low.count("a-zA-Z") == 0
                 threshold_low=threshold_low.to_f
             end
 
             if value.is_a?(Float)
                 @host_item=HostItem.where(host_id: host_id, item_id: item_id).last
-                if value >= threshold_high
+                if !threshold_high.nil? and value >= threshold_high
                     if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                         @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "high", threshold: threshold_high)
                         @host_item.update(active_high_id: @alert.id)
@@ -90,9 +99,11 @@ class ScheduleItemJob
                         set_active_alert(@host_item.active_warning_id,threshold_high,"high",@host_item)
                     elsif @host_item.active_high_id.nil? and !@host_item.active_low_id.nil?
                         set_active_alert(@host_item.active_low_id,threshold_high,"high",@host_item)
+                    else
+                    ActiveAlert.find(@host_item.active_high_id).update(host_item_id: @host_item.id)
                     end
-                elsif value >= threshold_warning and value < threshold_high
-                    if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
+                elsif !threshold_high.nil? and !threshold_warning.nil? and value >= threshold_warning and value < threshold_high  
+                    if @host_item.active_warning_id.nil? and @host_item.active_low_id.nil? and @host_item.active_high_id.nil? 
                         @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "warning", threshold: threshold_warning)
                         @host_item.update(active_high_id: nil)
                         @host_item.update(active_warning_id: @alert.id)
@@ -101,8 +112,10 @@ class ScheduleItemJob
                         set_active_alert(@host_item.active_high_id,threshold_warning,"warning",@host_item)
                     elsif @host_item.active_warning_id.nil? and !@host_item.active_low_id.nil?
                         set_active_alert(@host_item.active_low_id,threshold_warning,"warning",@host_item)
+                    else
+                        ActiveAlert.find(@host_item.active_warning_id).update(host_item_id: @host_item.id)
                     end
-                elsif value >= threshold_low and value < threshold_warning
+                elsif !threshold_low.nil? and !threshold_warning.nil? and value >= threshold_low and value < threshold_warning 
                     if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                         @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "low", threshold: threshold_low)
                         @host_item.update(active_low_id: @alert.id)
@@ -112,6 +125,8 @@ class ScheduleItemJob
                         set_active_alert(@host_item.active_high_id,threshold_low,"low",@host_item)
                     elsif @host_item.active_low_id.nil? and !@host_item.active_warning_id.nil?
                         set_active_alert(@host_item.active_warning_id,threshold_low,"low",@host_item)
+                    else
+                        ActiveAlert.find(@host_item.active_low_id).update(host_item_id: @host_item.id)
                     end
                 else
                     if !@host_item.active_warning_id.nil? or !@host_item.active_high_id.nil? or !@host_item.active_low_id.nil?
