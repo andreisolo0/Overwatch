@@ -1,6 +1,6 @@
 class HostsController < ApplicationController
     before_action :require_user
-    before_action :set_host, only: %i[ show edit update destroy assigned_items]
+    before_action :set_host, only: %i[ show edit update destroy assigned_items latest_data]
     before_action :permit_edit_own_host_or_admin, only: [:edit, :update, :destroy]
     
     def assigned_items
@@ -87,6 +87,10 @@ class HostsController < ApplicationController
         assigned_items
     end
 
+    def latest_data
+        @host.assigned_items_host
+        render json: @host.assigned_items_host
+    end
     
     def destroy
         #No longer needed because we have before_action @article = Article.find(params[:id])

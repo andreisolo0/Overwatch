@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :v1 do
+      resources :hosts, only: [:index, :show]
+      get 'hosts/:id/latest_data', to: 'hosts#latest_data'
+    end
+  end
   resources :host_items, only: [:create, :destroy, :update]
   post 'schedule_collector_job', to: 'host_items#schedule_collector_job'
   resources :articles
@@ -21,6 +27,7 @@ Rails.application.routes.draw do
   get 'apply_remote_action', to: 'remote_actions#apply_remote_action'
   get 'unassign_items', to: 'items#unassign_items'
   get 'triggers', to: 'host_items#triggers'
+  get '/hosts/:id/latest_data', to: 'hosts#latest_data'
   resources :items
   resources :remote_actions
   resources :active_alerts
