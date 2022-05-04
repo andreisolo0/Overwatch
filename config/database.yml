@@ -12,8 +12,8 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   #timeout: 5000
   username: rails
-  password: 5y5t3mp455
-
+  #password: 5y5t3mp455
+  password: 5f058f1d00d351d099b7e202fe521ca2
 
 development:
   <<: *default

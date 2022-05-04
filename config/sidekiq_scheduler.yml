@@ -4,57 +4,9 @@ ping_localhost:
   class: PingJob
   args:
   - '1'
-job_for_item_1_on_host_1:
-  every:
-  - 1m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '1'
-job_for_item_3_on_host_1:
-  every:
-  - 5m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '3'
-ping_test-centos.localhost:
+ping_pi.remote:
   every:
   - 1m
   class: PingJob
   args:
-  - 6
-ping_test-ubuntu.localhost:
-  every:
-  - 1m
-  class: PingJob
-  args:
-  - 7
-job_for_item_1_on_host_6:
-  every:
-  - 1m
-  class: ScheduleItemJob
-  args:
-  - '6'
-  - '1'
-job_for_item_3_on_host_6:
-  every:
-  - 1m
-  class: ScheduleItemJob
-  args:
-  - '6'
-  - '3'
-job_for_item_6_on_host_1:
-  every:
-  - 1m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '6'
-job_for_item_3_on_host_7:
-  every:
-  - 30s
-  class: ScheduleItemJob
-  args:
-  - '7'
-  - '3'
+  - 3
