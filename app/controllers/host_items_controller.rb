@@ -71,7 +71,9 @@ class HostItemsController < ApplicationController
         @host = Host.find(@host_item.host_id)
         if @host_item.update(host_item_params)
             # This might be better handled and check wheter is neccesarilly to update all values from table
-            HostItem.where(host_id: @host_item.host_id, item_id: @host_item.item_id).update(threshold_high: @host_item.threshold_high, threshold_warning: @host_item.threshold_warning, threshold_low: @host_item.threshold_low, alert_name_high: @host_item.alert_name_high, alert_name_warning: @host_item.alert_name_warning, alert_name_low: @host_item.alert_name_low)
+            HostItem.where(host_id: @host_item.host_id, item_id: @host_item.item_id).update(threshold_high: @host_item.threshold_high, threshold_warning: @host_item.threshold_warning, threshold_low: @host_item.threshold_low, 
+                                                                                    alert_name_high: @host_item.alert_name_high, alert_name_warning: @host_item.alert_name_warning, alert_name_low: @host_item.alert_name_low, 
+                                                                                    recovery_high: @host_item.recovery_high, recovery_warning: @host_item.recovery_warning, recovery_low: @host_item.recovery_low)
             flash[:notice] = "Triggers & Alerts set"
             redirect_to @host
         end
@@ -99,6 +101,6 @@ class HostItemsController < ApplicationController
     private
     def host_item_params
         #byebug
-        params.require(:host_item).permit( :threshold_high, :threshold_warning, :threshold_low, :alert_name_high, :alert_name_warning, :alert_name_low)
+        params.require(:host_item).permit( :threshold_high, :threshold_warning, :threshold_low, :alert_name_high, :alert_name_warning, :alert_name_low, :recovery_high, :recovery_low, :recovery_warning)
     end
 end

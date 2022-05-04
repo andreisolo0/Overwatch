@@ -5,49 +5,133 @@
       <div class = "row justify-content-center ">
         <div class="col-sm-4 row-20 form_container">
           <%= form_with(model: @host_item) do |form| %>
-          <div class="alert alert-danger" >
-              <div class="form-group  row-20 ">
-                  <strong><%= form.label :threshold_high , class: "col-20 col-form-label"%></strong>
+            <div class="alert alert-danger" >
+              <div style="position:relative; left:20px; bottom:5px">
+                <% if @host_item.threshold_high.empty?%>
+                  <input type="checkbox" id="high_checkbox" class= "form-check-input">
+                <%else%>
+                  <input type="checkbox" id="high_checkbox" class= "form-check-input" checked>
+                <%end%>
+                <strong><label for="high_checkbox" class="form-check-label">Set high threshold & trigger</label></strong>
+              </div>
+              <div class="high-trigger">
+                <div class="form-group  row-20 ">
+                    <strong><%= form.label :threshold_high , class: "col-20 col-form-label"%></strong>
+                    <div class="col-20">
+                      <%= form.text_field :threshold_high , class: "form-control form-control-sm"%>
+                    </div>
+                </div>
+                <div class="form-group  row-20 ">
+                  <strong><%= form.label :alert_name_high , class: "col-20 col-form-label"%></strong>
                   <div class="col-20">
-                    <%= form.text_field :threshold_high , class: "form-control form-control-sm"%>
+                    <%= form.text_field :alert_name_high , class: "form-control form-control-sm"%>
                   </div>
-              </div>
-              <div class="form-group  row-20 ">
-                <strong><%= form.label :alert_name_high , class: "col-20 col-form-label"%></strong>
-                <div class="col-20">
-                  <%= form.text_field :alert_name_high , class: "form-control form-control-sm"%>
                 </div>
+                <strong><%= form.label "Recovery action" , class: "col-20 col-form-label"%></strong>
+                <%= form.select(:recovery_high , RemoteAction.all.collect { |p| [  p.action_name , p.id]}, include_blank: "Select an action") %>
               </div>
-          </div> 
-          <div class="alert alert-warning" >
-              <div class="form-group row-20">
-                <strong><%= form.label :threshold_warning , class: "col-20 col-form-label"%></strong>
-                  <div class="col-20">
-                  <%= form.text_field :threshold_warning ,class: "form-control form-control-sm"%>
+            </div>
+           
+           
+            <div class="alert alert-warning" >
+                <div style="position:relative; left:20px; bottom:5px">
+                  <% if @host_item.threshold_warning.empty?%>
+                    <input type="checkbox" id="warning_checkbox" class= "form-check-input">
+                  <%else%>
+                    <input type="checkbox" id="warning_checkbox" class= "form-check-input" checked>
+                  <%end%>
+                  <strong><label for="warning_checkbox" class="form-check-label">Set warning threshold & trigger</label></strong>
                 </div>
-              </div>
-              <div class="form-group  row-20 ">
-                <strong><%= form.label :alert_name_warning , class: "col-20 col-form-label"%></strong>
-                <div class="col-20">
-                  <%= form.text_field :alert_name_warning , class: "form-control form-control-sm"%>
+                <div class="warning-trigger">
+                  <div class="form-group row-20">
+                    <strong><%= form.label :threshold_warning , class: "col-20 col-form-label"%></strong>
+                      <div class="col-20">
+                      <%= form.text_field :threshold_warning ,class: "form-control form-control-sm"%>
+                    </div>
+                  </div>
+                  <div class="form-group  row-20 ">
+                    <strong><%= form.label :alert_name_warning , class: "col-20 col-form-label"%></strong>
+                    <div class="col-20">
+                      <%= form.text_field :alert_name_warning , class: "form-control form-control-sm"%>
+                    </div>
+                  </div>
+                  
+                  <strong><%= form.label "Recovery action" , class: "col-20 col-form-label "%></strong>
+                 <%= form.select(:recovery_warning , RemoteAction.all.collect { |p| [  p.action_name , p.id]}, include_blank: "Select an action") %>
                 </div>
-              </div>
+                
           </div>
+           
+            <div class="alert alert-low" >
+              <div style="position:relative; left:20px; bottom:5px">
+                  <% if @host_item.threshold_low.empty?%>
+                    <input type="checkbox" id="low_checkbox" class= "form-check-input">
+                  <%else%>
+                    <input type="checkbox" id="low_checkbox" class= "form-check-input" checked>
+                  <%end%>
+                  <strong><label for="low_checkbox" class="form-check-label">Set low threshold & trigger</label></strong>
+                </div>
+                <div class="low-trigger">
+                  <div class="form-group row-20">
+                  <strong><%= form.label :threshold_low , class: "col-20 col-form-label"%></strong>
+                      <div class="col-20">
+                      <%= form.text_field :threshold_low ,class: "form-control form-control-sm"%>
+                      </div>
+                  </div>
+                  <div class="form-group  row-20 ">
+                    <strong><%= form.label :alert_name_low , class: "col-20 col-form-label"%></strong>
+                    <div class="col-20">
+                      <%= form.text_field :alert_name_low , class: "form-control form-control-sm"%>
+                    </div>
+                  </div>
+                  <strong><%= form.label "Recovery action" , class: "col-20 col-form-label"%></strong>
+                    <%= form.select(:recovery_low , RemoteAction.all.collect { |p| [  p.action_name , p.id]}, include_blank: "Select an action") %>
+                </div>
+                </div>
+          
+          <script type="text/javascript">
+                if ($("#high_checkbox").is(':checked')) {
+                      $(".high-trigger").show();
+                  } else {
+                      $(".high-trigger").hide();
+                  }
+                $("#high_checkbox").click(function(){
+                  if ($("#high_checkbox").is(':checked')) {
+                      $(".high-trigger").show();
+                  } else {
+                      $(".high-trigger").hide();
+                  }
+                  
+                });
 
-          <div class="alert alert-low" >
-            <div class="form-group row-20">
-            <strong><%= form.label :threshold_low , class: "col-20 col-form-label"%></strong>
-                <div class="col-20">
-                <%= form.text_field :threshold_low ,class: "form-control form-control-sm"%>
-                </div>
-            </div>
-            <div class="form-group  row-20 ">
-              <strong><%= form.label :alert_name_low , class: "col-20 col-form-label"%></strong>
-              <div class="col-20">
-                <%= form.text_field :alert_name_low , class: "form-control form-control-sm"%>
-              </div>
-            </div>
-          </div>
+                if ($("#warning_checkbox").is(':checked')) {
+                      $(".warning-trigger").show();
+                  } else {
+                      $(".warning-trigger").hide();
+                  }
+                $("#warning_checkbox").click(function(){
+                  if ($("#warning_checkbox").is(':checked')) {
+                      $(".warning-trigger").show();
+                  } else {
+                      $(".warning-trigger").hide();
+                  }
+                  
+                });
+
+                if ($("#low_checkbox").is(':checked')) {
+                      $(".low-trigger").show();
+                  } else {
+                      $(".low-trigger").hide();
+                  }
+                $("#low_checkbox").click(function(){
+                  if ($("#low_checkbox").is(':checked')) {
+                      $(".low-trigger").show();
+                  } else {
+                      $(".low-trigger").hide();
+                  }
+                  
+                });
+          </script>
         <div class="actions text-center" >
           <%= form.submit "Set", class: "btn btn-success" %>
           <%= link_to 'Host', @host , class: "btn btn-primary text-white" %>

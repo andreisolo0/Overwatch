@@ -56,19 +56,24 @@ class ScheduleItemJob
         alert_name_high=HostItem.where(host_id: host_id, item_id: item_id).last.alert_name_high
         alert_name_warning=HostItem.where(host_id: host_id, item_id: item_id).last.alert_name_warning
         alert_name_low=HostItem.where(host_id: host_id, item_id: item_id).last.alert_name_low
+        recovery_high=HostItem.where(host_id: host_id, item_id: item_id).last.recovery_high
+        recovery_warning=HostItem.where(host_id: host_id, item_id: item_id).last.recovery_warning
+        recovery_low=HostItem.where(host_id: host_id, item_id: item_id).last.recovery_low
         #Create entry in HostItem table where all values are stored
         if value[0].nil?
-            @host_item = HostItem.create(host: @host, item: @item, value: "ERR:"+value[1], threshold_high: threshold_high,
-                 threshold_warning: threshold_warning, threshold_low: threshold_low, active_high_id: active_high_id,
-                 active_warning_id: active_warning_id, active_low_id: active_low_id, alert_name_high: alert_name_high,
-                 alert_name_warning: alert_name_warning,alert_name_low: alert_name_low)
+            @host_item = HostItem.create(host: @host, item: @item, value: "ERR:"+value[1], 
+                 threshold_high: threshold_high,threshold_warning: threshold_warning, threshold_low: threshold_low, 
+                 active_high_id: active_high_id, active_warning_id: active_warning_id, active_low_id: active_low_id, 
+                 alert_name_high: alert_name_high, alert_name_warning: alert_name_warning,alert_name_low: alert_name_low, 
+                 recovery_high: recovery_high, recovery_warning: recovery_warning, recovery_low: recovery_low)
         else
             value[0] = value[0].gsub("\n","")
             puts value[0].count("a-zA-Z")
-            @host_item = HostItem.create(host: @host, item: @item, value: value[0], threshold_high: threshold_high,
-                threshold_warning: threshold_warning, threshold_low: threshold_low, active_high_id: active_high_id,
-                active_warning_id: active_warning_id, active_low_id: active_low_id, alert_name_high: alert_name_high,
-                alert_name_warning: alert_name_warning,alert_name_low: alert_name_low)
+            @host_item = HostItem.create(host: @host, item: @item, value: value[0], 
+                threshold_high: threshold_high,threshold_warning: threshold_warning, threshold_low: threshold_low, 
+                active_high_id: active_high_id, active_warning_id: active_warning_id, active_low_id: active_low_id, 
+                alert_name_high: alert_name_high, alert_name_warning: alert_name_warning,alert_name_low: alert_name_low, 
+                recovery_high: recovery_high, recovery_warning: recovery_warning, recovery_low: recovery_low)
             # Check what type of data the retrieved value/treshold is and convert it to float if it's the case
             
             if value[0].count("a-zA-Z") == 0
