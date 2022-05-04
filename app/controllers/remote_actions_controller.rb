@@ -78,7 +78,16 @@ class RemoteActionsController < ApplicationController
         @remote_action = RemoteAction.find(params[:remote_action_id])
         begin
             Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
-                @message = "Command \"#{@remote_action.action_name}\" returned:\n" + (ssh.exec! @remote_action.command_or_script) #@actions.script_content
+                if @host.run_as_sudo 
+                    output=(ssh.exec! "sudo "+@remote_action.command_or_script)
+                else
+                    output=(ssh.exec! @remote_action.command_or_script)
+                end
+                
+                @message = "Command \"#{@remote_action.action_name}\" returned:\n" + output #@actions.script_content
+                if output.empty?
+                    @message="Command produced no output"
+                end
                 respond_to do |format|
                     format.js { render partial: 'remote_actions/result' }
                 end
