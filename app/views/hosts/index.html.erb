@@ -1,7 +1,13 @@
 <div id="page-content">
     <h2 class="text-center mt-4 " id="page-title">Hosts</h2>
     
-    <%= render 'shared/pagination', obj: @hosts %>
+    
+    
+    <%= form_tag hosts_path, :method => 'get' , class:"form-inline" do %>
+        <%= text_field_tag :search, params[:search], class: "form-control mr-sm-4-searchbox", placeholder: "Search hostname"%>
+        <%= submit_tag "Search", :title => nil, class: "btn btn-success my-2 my-sm-0"%>
+    <% end %>
+      
 
     <table class="table table-sm table-dark table-bordered ">
       <thead>
@@ -26,11 +32,22 @@
                 <% if host.online? %>
                   <span class="badge badge-success">Online</span>
                 <% else %>
+                  <% if host.init? %>
+                  <span class="badge badge-info">Initializing</span>
+                  <%else%>
                   <span class="badge badge-danger">Offline</span>
+                  <% end %>
                 <% end %>
+                <% if host.reboot_required %>
+                  <span class="badge badge-warning">Reboot</span>
+                <%end%>
               </td>
               <td>
-              <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
+              <% if host.init? %>
+                <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white disabled" %>
+              <%else%>
+                <%= link_to 'View', host_path(host) , class: "btn btn-outline-success text-white" %>
+              <%end%>
               <% if @current_user.id == host.user_id || @current_user.admin == true %>
                 <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
                 <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
@@ -41,8 +58,9 @@
       </tbody>
     </table>
     <%= render 'shared/pagination', obj: @hosts %>
-    <div class="text-center">
-    <%= link_to 'Create', new_host_path, class: "btn btn-success text-white" %>
-    <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
-    </div>
-    </div>
+      <div class="text-center">
+      <%= link_to 'Create', new_host_path, class: "btn btn-success text-white" %>
+      <%= link_to 'Home', root_path , class: "btn btn-primary text-white" %>
+      </div>
+</div>
+    

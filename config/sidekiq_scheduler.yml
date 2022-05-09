@@ -10,45 +10,15 @@ ping_pi.remote:
   class: PingJob
   args:
   - 3
-job_for_item_1_on_host_1:
+ping_centos.solomon-andrei.com:
   every:
   - 1m
-  class: ScheduleItemJob
+  class: PingJob
   args:
-  - '1'
-  - '1'
-job_for_item_6_on_host_1:
+  - 4
+ping_ubuntu.solomon-andrei.com:
   every:
-  - 60m
-  class: ScheduleItemJob
+  - 1m
+  class: PingJob
   args:
-  - '1'
-  - '6'
-job_for_item_5_on_host_1:
-  every:
-  - 5m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '5'
-job_for_item_2_on_host_1:
-  every:
-  - 5m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '2'
-job_for_item_3_on_host_1:
-  every:
-  - 10m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '3'
-job_for_item_4_on_host_1:
-  every:
-  - 15m
-  class: ScheduleItemJob
-  args:
-  - '1'
-  - '4'
+  - 5

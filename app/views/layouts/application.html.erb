@@ -6,12 +6,23 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8066260b3f.js" crossorigin="anonymous"></script>
+
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body class="d-flex flex-column">
     <%= render 'layouts/navigation' %>
     <%= render 'layouts/messages' %>
+    
     <%= yield %>
+    <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white">
+    <div class="container text-center ">
+      <small>Copyright asolomon &copy; Overwatch</small><br>
+      <small>v1.0-beta</small>
+    </div>
+  </footer>
   </body>
+  
 </html>

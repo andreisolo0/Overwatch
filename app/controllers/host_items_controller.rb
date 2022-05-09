@@ -55,7 +55,7 @@ class HostItemsController < ApplicationController
                 f.write(YAML.dump(scheduler_data))
             end
         end
-        Sidekiq.set_schedule(job_name, { 'every' => [run_interval], 'class' => 'ScheduleItemJob', 'args' => [params[:host_id],params[:item_id]] })
+        Sidekiq.set_schedule(job_name, { 'every' => [run_interval+'m'], 'class' => 'ScheduleItemJob', 'args' => [params[:host_id],params[:item_id]] })
         flash[:notice]="Job scheduled"
         redirect_to Host.find(params[:host_id])
     end

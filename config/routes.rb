@@ -31,4 +31,5 @@ Rails.application.routes.draw do
   resources :items
   resources :remote_actions
   resources :active_alerts
+  get 'configuration', to: 'application#configuration'
 end

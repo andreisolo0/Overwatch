@@ -9,10 +9,10 @@ class SessionsController < ApplicationController
         if user && user.authenticate(params[:session][:password])
             session[:user_id] = user.id
             flash[:notice] = "Logged in successfully"
-            redirect_to user
+            redirect_to root_path
         else
             # render is not a new request, no http cycle request, flash now + render to show in current page
-            flash.now[:alert] = "Oopsie, seems like the username or passowrd are wrong!"
+            flash.now[:alert] = "Oopsie, seems like the username or password are wrong!"
             render 'new' 
         end
     end

@@ -1,0 +1,70 @@
+<div id="page-content">
+<h3 class="text-center mt-4 " id="page-title"><i class="fa-solid fa-screwdriver-wrench"></i> Application configuration</h3>
+
+<div class = "row justify-content-center ">
+        <div class="col-sm-5 row-10 col-20 form_container">
+                    <%= form_with url: "/configuration", method: :get do |form| %>
+                        <h5 class="text-center" style="padding-bottom:10px;"><i class="fa-solid fa-paper-plane"></i> Email</h5>
+
+                        <div class="container">
+                            <div class="row form-group ">
+                                <div class="col-3">
+                                    <strong><%= form.label :address, "Address:"%></strong>
+                                </div>
+                                <div class="col-8">
+                                    <%= form.text_field :address, class: "form-control"%>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col-3" style="padding-top: 1px;">
+                                    <strong><%= form.label :port, "Port:"%></strong>
+                                </div>
+                                <div class="col-2">
+                                    <%= form.text_field :port, class: "form-control"%>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col-3">
+                                    <strong><%= form.label :username, "Username:"%></strong>
+                                </div>
+                                <div class="col-8">
+                                    <%= form.text_field :username, class: "form-control"%>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col-3">
+                                    <strong><%= form.label :password, "Password:"%></strong>
+                                </div>
+                                <div class="col-8">
+                                    <%= form.password_field :password, class: "form-control"%>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col-3">
+                                    <strong><%= form.label :auth, "Authentication:"%></strong>
+                                </div>
+                                <div class="col-8">
+                                    <%= form.select :auth, ['plain', 'login', 'cram_md5'], class:"btn btn-primary"%>
+                                </div>
+                                <!--https://guides.rubyonrails.org/action_mailer_basics.html -->
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col-3">
+                                    <strong><%= form.label :tls, "Auto TLS:"%></strong>
+                                </div>
+                                <div class="col-8">
+                                    <%= form.select :tls, ['true', 'false']%>
+                                </div>
+                            </div>
+
+
+                        <div class="text-center">
+                            <%= form.submit "Apply",  class: "btn btn-primary text-white"%>
+                        </div>
+                    <% end %>
+            
+        </div>
+</div>
+
+
+</div>

@@ -8,19 +8,21 @@ class Host < ApplicationRecord
         # read the online status from the host table
     end
 
-    #def ssh_available?
-    #    begin
-    #        Net::SSH.start(self.ip_address_or_fqdn, self.user_to_connect, :password => self.password, :port => self.ssh_port, non_interactive: true, :timeout => 2) do |ssh|
-    #            authenticated=true
-    #        end
-    #    rescue Net::SSH::AuthenticationFailed
-    #        authenticated=false
-    #    rescue Errno::ECONNREFUSED
-    #        authenticated=false
-    #    rescue Errno::EHOSTUNREACH
-    #        authenticated=false
-    #    rescue Net::SSH::ConnectionTimeout
-    #        authenticated=false
-    #    end
-    #end
+    def init?
+        Host.find(self.id).os.nil? 
+    end
+
+    def self.search(search)
+        if search
+            host = Host.find_by(hostname: search)
+            if host
+                self.where(hostname: host.hostname)
+            else
+                @hosts = Host.all
+            end
+        else
+            @hosts = Host.all
+        end
+
+    end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_04_190818) do
+ActiveRecord::Schema.define(version: 2022_05_09_113732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2022_05_04_190818) do
     t.boolean "online"
     t.integer "assigned_items_host", default: [], array: true
     t.boolean "autopatch"
+    t.boolean "reboot_required"
   end
 
   create_table "items", force: :cascade do |t|

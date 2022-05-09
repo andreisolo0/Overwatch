@@ -10,7 +10,11 @@
             <!--local: false enables javascript-->
             <%= form_with url: apply_remote_action_path, method: :get, local: false do  |form| %> 
                 <!-- send :id as params and list the hostnames -->
-                <%= form.select :host_id , Host.where(user_id: current_user).collect { |p| [  p.hostname , p.id] } %>
+                <% if current_user.admin == true %>
+                  <%= form.select :host_id , Host.all.collect { |p| [  p.hostname , p.id] } %>
+                <%else%>
+                  <%= form.select :host_id , Host.where(user_id: current_user).collect { |p| [  p.hostname , p.id] } %>
+                <%end%>
                   <!--add hiddent field tag to add extra parameter to params hash-->
                   <%= hidden_field_tag(:remote_action_id, @remote_action.id) %>
                   <%= form.submit "Apply" %>

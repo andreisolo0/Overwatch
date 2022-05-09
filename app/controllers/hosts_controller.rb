@@ -77,10 +77,20 @@ class HostsController < ApplicationController
     end
 
     def index
-        #@hosts = Host.all
-        @hosts = Host.paginate(page: params[:page], per_page: 25)
+        @hosts = Host.search(params[:search]).paginate(page: params[:page], per_page: 25)
+        if !params[:search].nil? && @hosts.count != 1
+            if !params[:search].empty?
+                flash.now[:warn]="There is no host with this name"
+            else
+                redirect_to hosts_path
+            end
+        end
+
     end
 
+    def search
+
+    end
 
     def show
         #@host = Host.find(params[:id])
@@ -112,7 +122,7 @@ class HostsController < ApplicationController
     private
     def host_params
         #byebug
-        params.require(:host).permit( :ip_address_or_fqdn, :hostname, :user_to_connect, :password, :ssh_port, :run_as_sudo, :autopatch)
+        params.require(:host).permit( :ip_address_or_fqdn, :hostname, :user_to_connect, :password, :ssh_port, :run_as_sudo, :autopatch, :search)
     end
 
     def permit_edit_own_host_or_admin
