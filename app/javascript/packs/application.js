@@ -14,3 +14,8 @@ ActiveStorage.start()
 
 import "bootstrap"
 require("jquery")
+require("chartkick")
+require("chart.js")
+
+import ApexCharts from 'apexcharts'
+window.ApexCharts = ApexCharts

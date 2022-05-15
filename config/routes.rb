@@ -32,4 +32,5 @@ Rails.application.routes.draw do
   resources :remote_actions
   resources :active_alerts
   get 'configuration', to: 'application#configuration'
+  get 'dashboard', to: 'pages#dashboard'
 end

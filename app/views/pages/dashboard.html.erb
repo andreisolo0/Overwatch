@@ -1,0 +1,18 @@
+<div id="page-content">
+    <div class="container text-center">
+    <h2 class="mt-4 animate-charcter" id="page-title">Dashboard</h2>
+    <br>
+    </div>
+    <table width='100%'>
+        <tr>
+            <td style="display: inline-block; width: 10%;"></td>
+            <td style="display: inline-block; width: 30%;">
+                <%= pie_chart( [{ name: "online", data: Host.where(online: true).count },{ name: "offline", data: Host.where(online: false).count }], legend: "left", colors:['#09ae51', '#ff0000'], title: "Online/Offline hosts") %>
+            </td>
+            <td style="display: inline-block; width: 20%;"></td>
+            <td style="display: inline-block; width: 30%;">
+                <%= pie_chart( [{ name: "enabled", data: Host.where(autopatch: true).count },{ name: "disabled", data: Host.where(autopatch: false).count }], legend: "left", colors:['#09ae51', '#ff0000'], title: "Hosts with autopatch enable") %>
+            </td>
+        </tr>
+    </table>
+</div>

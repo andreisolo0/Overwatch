@@ -3,6 +3,12 @@ class Host < ApplicationRecord
     has_many :host_items
     has_many :items, through: :host_items
     
+    validates :hostname, presence: true, uniqueness: true
+    validates :ip_address_or_fqdn, presence: true, uniqueness: true
+    validates :user_to_connect, presence: true
+    validates :password, presence: true
+    validates :ssh_port, presence: true, numericality: { only_integer: true }
+
     def online?
         Host.find(self.id).online
         # read the online status from the host table

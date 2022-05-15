@@ -10,7 +10,6 @@ class ItemsController < ApplicationController
     def create
         @item = Item.new(item_params)
         if @item.save
-            #Sidekiq.set_schedule('Job for item '+ @item.item_name, { 'every' => ['1m'], 'class' => 'ScheduleItemJob', 'args' => [@item.id] })
             flash[:notice] = "#{@item.item_name} created"
             redirect_to items_path
         else
