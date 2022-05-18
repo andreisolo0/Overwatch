@@ -11,8 +11,11 @@
             </td>
             <td style="display: inline-block; width: 20%;"></td>
             <td style="display: inline-block; width: 30%;">
-                <%= pie_chart( [{ name: "enabled", data: Host.where(autopatch: true).count },{ name: "disabled", data: Host.where(autopatch: false).count }], legend: "left", colors:['#09ae51', '#ff0000'], title: "Hosts with autopatch enable") %>
+                <%= pie_chart( [{ name: "enabled", data: Host.where(autopatch: true).count },{ name: "disabled", data: Host.where(autopatch: false).count },{ name: "not configured", data: Host.where(autopatch: nil).count }], legend: "left", colors:['#09ae51', '#ff0000','#f1852d'], title: "Hosts with autopatch enable") %>
             </td>
+        </tr>
+        <tr>
+        
         </tr>
     </table>
 </div>

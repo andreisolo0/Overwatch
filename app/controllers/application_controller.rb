@@ -20,7 +20,27 @@ class ApplicationController < ActionController::Base
     end
 
     def configuration
-
+        require 'yaml'
+        @mail_server=params[:address]
+        @port=params[:port]
+        @username=params[:username]
+        @password=params[:password]
+        @auth=params[:auth]
+        @tls=params[:tls]
+        config={
+            "mail_server"=>@mail_server,
+            "port"=>@port,
+            "username"=>@username,
+            "password"=>@password,
+            "auth"=>@auth,
+            "tls"=>@tls
+        }
+        if mail_server.present? && port.present? && username.present? && password.present?
+            File.open("mail_config.yml", "w") { |file| file.write(config.to_yaml) }
+            flash[:success] = "Configuration saved successfully!"
+        else
+            flash[:alert] = "Please fill all the fields!"
+        end
     end
 
     

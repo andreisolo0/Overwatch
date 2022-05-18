@@ -4,6 +4,9 @@ ping_localhost:
   class: PingJob
   args:
   - '1'
+check_active_alerts:
+  every: 1m
+  class: CheckActiveAlertsJob
 ping_pi.remote:
   every:
   - 1m
@@ -22,3 +25,23 @@ ping_ubuntu.solomon-andrei.com:
   class: PingJob
   args:
   - 5
+autopatch_overwatch.localhost:
+  every:
+  - 1d
+  class: AutopatchJob
+  args:
+  - 1
+job_for_item_15_on_host_4:
+  every:
+  - 1m
+  class: ScheduleItemJob
+  args:
+  - '4'
+  - '15'
+job_for_item_15_on_host_5:
+  every:
+  - 1m
+  class: ScheduleItemJob
+  args:
+  - '5'
+  - '15'

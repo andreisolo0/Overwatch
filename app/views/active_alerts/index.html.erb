@@ -9,7 +9,7 @@
         </div>
         </container>
     <% else %>
-        <table class="table table-sm table-dark table-bordered ">
+        <table class="table table-sm table-dark table-bordered">
           <thead>
             <tr>
               
@@ -18,21 +18,36 @@
               <th class="text-center" scope="col">Severity</th>
               <th class="text-center" scope="col">Last value</th>
               <th class="text-center" scope="col">Since</th>
+              <th class="text-center" scope="col">Resolved</th>
               <th class="text-center" scope="col">Actions</th>
            
             </tr>
           </thead>
             <tbody class="text-center">
-                <% @active_alerts.each do |alert| %>
-                    <% case alert.severity  %>
-                    <% when "high" %>
-                        <tr class="high">
-                    <% when "warning" %>
-                        <tr class="warning">
-                    <% when "low" %>
-                        <tr class="low">
+                <% @active_alerts.unscoped.order("id DESC").each do |alert| %>
+                    <%if alert.resolved %>
+                        <tr class="resolved">
+                    <%else%>
+                        <% if alert.new %>
+                            <% case alert.severity  %>
+                            <% when "high" %>
+                                <tr class="high">
+                            <% when "warning" %>
+                                <tr class="warning">
+                            <% when "low" %>
+                                <tr class="low">
+                            <%end%>
+                        <%else%>
+                            <% case alert.severity  %>
+                            <% when "high" %>
+                                <tr class="high-old">
+                            <% when "warning" %>
+                                <tr class="warning-old">
+                            <% when "low" %>
+                                <tr class="low-old">
+                            <%end%>
+                        <%end%>
                     <%end%>
-                    
                         <td>
                             <% case alert.severity  %>
                             <% when "high" %>
@@ -45,8 +60,9 @@
                         </td>
                         <td ><%= Host.find(HostItem.where(id: alert.host_item_id).last.host_id).hostname %></td>
                         <td ><%= alert.severity.upcase%></td>
-                        <td><%= HostItem.where(id: alert.host_item_id).last.value%></td>
+                        <td><%= HostItem.where(host_id: alert.host_id, item_id: alert.item_id).last.value%></td>
                         <td><%= alert.created_at%></td>
+                        <td><%= alert.resolved_at%></td>
                         <td>
                         <%= puts "Actions like ACK will go here" %>
                         </td>

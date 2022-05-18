@@ -14,7 +14,6 @@ class PingJob
                 @reboot_required=ssh.exec! "cat /var/run/reboot-required"
             end
             @host.update(os: @os)
-            puts @reboot_required.include? "restart"
             if @reboot_required.include? "restart"
                 @host.update(reboot_required: true)
             else

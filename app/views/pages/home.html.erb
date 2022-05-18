@@ -50,16 +50,20 @@
             });
         </script>
         
-        <div class="jumbotron text-white container" id="home-container">
+        <div class="jumbotron text-white container" id="home-container" style="position: relative; height: 400px;">
             <!-- <img src="<%= asset_path('iot-connected.png') %>" class="img-fluid mx-auto d-block" width="35%" height="35%"> -->
             <h2 class="display-4 align-top" style = "position: relative; left: 0px; top:20%; bottom:50%;">Monitor your World</h2>
             
             <div class="container" style="position: relative; left: 15%; top:25%; bottom:50%;">
-            <div class="word"></div></div>
+                <div class="word"></div>
+            </div>
+            
             <% if !logged_in? %>
                 <br>
                 <br>
-                <%= link_to "SIGN UP", signup_path, class: " btn btn-success btn-lg text-white" %>
+                <div style="text-align:center; position: absolute; bottom: 0; padding-bottom: 3%; padding-left:40%;">
+                    <%= link_to "SIGN UP", signup_path, class: "btn btn-success btn-lg text-white " %>
+                </div>
             <% end %>
             
             
