@@ -95,6 +95,7 @@ class HostItemsController < ApplicationController
             f.write(YAML.dump(scheduler_data))
         end
         Sidekiq.remove_schedule(job_name)
+        ActiveAlert.where(host_id: params[:id], item_id: params[:item_id]).destroy_all
         flash[:notice]="The item values and related jobs were removed"
         redirect_to @host
     end

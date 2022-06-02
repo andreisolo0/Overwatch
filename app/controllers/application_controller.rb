@@ -18,9 +18,12 @@ class ApplicationController < ActionController::Base
             redirect_to forbidden_path
         end
     end
-
     def configuration
+    
+    end
+    def save_configuration
         require 'yaml'
+        
         @mail_server=params[:address]
         @port=params[:port]
         @username=params[:username]
@@ -35,9 +38,11 @@ class ApplicationController < ActionController::Base
             "auth"=>@auth,
             "tls"=>@tls
         }
-        if mail_server.present? && port.present? && username.present? && password.present?
-            File.open("mail_config.yml", "w") { |file| file.write(config.to_yaml) }
+        
+        if @mail_server.present? && @port.present? && @username.present? && @password.present?
+            File.open(Rails.root.join("config","mail_config.yml"), "w") { |file| file.write(config.to_yaml) }
             flash[:success] = "Configuration saved successfully!"
+            redirect_to configuration_path
         else
             flash[:alert] = "Please fill all the fields!"
         end
