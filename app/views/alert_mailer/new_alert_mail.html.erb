@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>A new alert was generated on Overwatch by <%= @host.hostname %>!</p>
+    <p>
+    Alert details<br>
+    --------------------------
+    </p>
+    <p>Severity:
+        <%= @alert.severity %> 
+    </p>
+    <p>Threshold value: <%= @alert.threshold %></p>
+    <p>Details: <%= @details %></p>
+    
+    <p>Created: <%= @alert.created_at %></p>
+    <p>Resolved by default recovery method: <%= @alert.resolved %></p>
+  </body>
+</html>

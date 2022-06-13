@@ -1,0 +1,7 @@
+---
+mail_server: mail.solomon-andrei.com
+port: '587'
+username: "overwatch@solomon-andrei.com"
+password: "=,26,HAnDULeC"
+auth: plain
+tls: 'true'

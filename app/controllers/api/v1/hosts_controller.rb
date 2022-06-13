@@ -25,7 +25,7 @@ class Api::V1::HostsController < ApplicationController
         puts latest_values
       end
       if !latest_values.empty?
-        render :json => { :items => latest_values.as_json()}, status: 200
+        render :json => { :host=>@host.hostname, :items => latest_values.as_json() }, status: 200
       else
         render json: {error: "No items assigned on this host"}, status: 404
       end

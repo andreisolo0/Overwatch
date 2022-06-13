@@ -1,0 +1,14 @@
+A new alert was generated on Overwatch by <%= @host.hostname %>!
+
+Alert details
+--------------------------
+
+Severity:
+    <%= @alert.severity %> 
+
+Threshold value: <%= @alert.threshold %>
+Value received: <%= @order.email %>
+Details: <%= @details %>
+
+Created: <%= @alert.created_at %>
+Resolved by default recovery method: <%= @alert.resolved %>

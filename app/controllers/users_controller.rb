@@ -98,7 +98,6 @@ class UsersController < ApplicationController
         @user = User.find(params[:id])
     end
     def require_same_user_or_admin
-        
         if current_user != @user && current_user.admin != true
             flash[:alert] = "You can only modify your own account"
             redirect_to users_path

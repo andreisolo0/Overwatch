@@ -42,6 +42,7 @@ class ScheduleItemJob
             host_item.update(active_low_id: @alert.id)
             ActiveAlert.find(active_alert_id).update(host_item_id: host_item.id)
         end
+        AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
     end
 
     def update_host_item(host_item_object,active_high_id,active_warning_id,active_low_id)
@@ -62,8 +63,10 @@ class ScheduleItemJob
             action_to_be_performed=host_item_object.recovery_low
             alert_id=host_item_object.active_low_id
         end
+        
         puts "Recovery job for on #{host_item_object.host.hostname} performing"
         RecoveryJob.perform_async( host_item_object.host_id,action_to_be_performed,alert_id)
+        
     end
 
     def perform(*args)
@@ -106,7 +109,7 @@ class ScheduleItemJob
                 else
                     value=value[0]
                 end
-                
+                puts threshold_warning.empty?
                 if !threshold_high.empty? and threshold_high.count("a-zA-Z") == 0
                     threshold_high=threshold_high.to_f
                 end
@@ -116,13 +119,14 @@ class ScheduleItemJob
                 if !threshold_low.empty? and threshold_low.count("a-zA-Z") == 0
                     threshold_low=threshold_low.to_f
                 end
-
                 if value.is_a?(Float) && value != 0
                     @host_item=HostItem.where(host_id: host_id, item_id: item_id).last
-                    if !threshold_high.nil? and value >= threshold_high
+                    if  threshold_high.is_a?(Float) and !threshold_high.nil? and value >= threshold_high 
+                        puts "High alert triggered"
                         if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                             if (ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)  
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "high", threshold: threshold_high, host_id: host_id)
+                                AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
                             else
                                 ActiveAlert.where(item_id: item_id, host_id: host_id).update(host_item_id: @host_item.id, item_id: item_id, severity: "high", 
                                                     threshold: threshold_high, host_id: host_id, resolved: false, resolved_at: nil, new: false)
@@ -139,10 +143,15 @@ class ScheduleItemJob
                         #else
                         #ActiveAlert.find(@host_item.active_high_id).update(host_item_id: @host_item.id)
                         end
-                    elsif !threshold_high.nil? and !threshold_warning.nil? and value >= threshold_warning and value < threshold_high  
+                    elsif threshold_warning.is_a?(Float) and !threshold_high.nil? and !threshold_warning.nil? and value >= threshold_warning and value < threshold_high 
+                        puts "Warning alert triggered"
+                        puts value
+                        puts threshold_warning
+                        puts threshold_high
                         if @host_item.active_warning_id.nil? and @host_item.active_low_id.nil? and @host_item.active_high_id.nil? 
                             if (ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "warning", threshold: threshold_warning, host_id: host_id)
+                                AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
                             else
                                 ActiveAlert.where(item_id: item_id, host_id: host_id).update(host_item_id: @host_item.id, item_id: item_id, severity: "warning",
                                                     threshold: threshold_warning, host_id: host_id, resolved: false, resolved_at: nil, new: false)
@@ -159,10 +168,12 @@ class ScheduleItemJob
                         #else
                         #    ActiveAlert.find(@host_item.active_warning_id).update(host_item_id: @host_item.id)
                         end
-                    elsif !threshold_low.nil? and !threshold_warning.nil? and value >= threshold_low and value < threshold_warning 
+                    elsif threshold_low.is_a?(Float) and !threshold_low.nil? and !threshold_warning.nil? and value >= threshold_low and value < threshold_warning
+                        puts "Low alert triggered"
                         if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                             if(ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "low", threshold: threshold_low, host_id: host_id)
+                                AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
                             else
                                 ActiveAlert.where(item_id: item_id, host_id: host_id).update(host_item_id: @host_item.id, item_id: item_id, severity: "low",
                                                     threshold: threshold_low, host_id: host_id, resolved: false, resolved_at: nil, new: false)
@@ -181,19 +192,21 @@ class ScheduleItemJob
                         #    ActiveAlert.find(@host_item.active_low_id).update(host_item_id: @host_item.id)
                         end
                     else
-                        if !@host_item.active_warning_id.nil? or !@host_item.active_high_id.nil? or !@host_item.active_low_id.nil?
+                        puts "Clearing alerts..."
+                        #if !@host_item.active_warning_id.nil? or !@host_item.active_high_id.nil? or !@host_item.active_low_id.nil?
                             if !@host_item.active_low_id.nil?
                                 #ActiveAlert.find(@host_item.active_low_id).destroy
-                                ActiveAlert.find(@host_item.active_low_id).update(resolved: true)
+                                ActiveAlert.find(@host_item.active_low_id).update(resolved: true, resolved_at: Time.now)
+
                             elsif !@host_item.active_warning_id.nil?
                                 #ActiveAlert.find(@host_item.active_warning_id).destroy
-                                ActiveAlert.find(@host_item.active_warning_id).update(resolved: true)
+                                ActiveAlert.find(@host_item.active_warning_id).update(resolved: true, resolved_at: Time.now)
                             elsif !@host_item.active_high_id.nil?
                                 #ActiveAlert.find(@host_item.active_high_id).destroy
-                                ActiveAlert.find(@host_item.active_high_id).update(resolved: true)
+                                ActiveAlert.find(@host_item.active_high_id).update(resolved: true, resolved_at: Time.now)
                             end
                             update_host_item(@host_item,nil,nil,nil)
-                        end
+                        #end
                     end
                 end
 
@@ -204,10 +217,13 @@ class ScheduleItemJob
                         if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                             if (ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "high", threshold: threshold_high, host_id: host_id)
+                                AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
+                                @alert.send_mail
                             else
                                 ActiveAlert.where(item_id: item_id, host_id: host_id).update(host_item_id: @host_item.id, item_id: item_id, severity: "high", 
                                                     threshold: threshold_high, host_id: host_id, resolved: false, resolved_at: nil, new: false)
                                 @alert=ActiveAlert.find_by(item_id: item_id, host_id: host_id)
+
                             end
                             update_host_item(@host_item,@alert.id,nil,nil)
                             attempt_recovery(@host_item,"high") 
@@ -222,6 +238,7 @@ class ScheduleItemJob
                         if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                             if (ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "warning", threshold: threshold_warning, host_id: host_id)
+                                AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
                             else
                                 ActiveAlert.where(item_id: item_id, host_id: host_id).update(host_item_id: @host_item.id, item_id: item_id, severity: "warning", 
                                                 threshold: threshold_warning, host_id: host_id, resolved: false, resolved_at: nil, new: false)
@@ -240,6 +257,7 @@ class ScheduleItemJob
                         if @host_item.active_high_id.nil? and @host_item.active_warning_id.nil? and @host_item.active_low_id.nil?
                             if (ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "low", threshold: threshold_low, host_id: host_id)
+                                AlertMailer.with(alert_id: @alert.id).new_alert_mail.deliver_now
                             else
                                 ActiveAlert.where(item_id: item_id, host_id: host_id).update(host_item_id: @host_item.id, item_id: item_id, severity: "low",
                                                 threshold: threshold_low, host_id: host_id, resolved: false, resolved_at: nil, new: false)
@@ -255,7 +273,9 @@ class ScheduleItemJob
                             attempt_recovery(@host_item,"low") if !@host_item.recovery_low.nil?
                         end
                     else
-                        if !@host_item.active_warning_id.nil? or !@host_item.active_high_id.nil? or !@host_item.active_low_id.nil?
+                        puts "Clearing alerts..."
+                        
+                        #if !@host_item.active_warning_id.nil? or !@host_item.active_high_id.nil? or !@host_item.active_low_id.nil?
                             if !@host_item.active_low_id.nil?
                                 #ActiveAlert.find(@host_item.active_low_id).destroy
                                 ActiveAlert.find(@host_item.active_low_id).update(resolved: true)
@@ -267,7 +287,7 @@ class ScheduleItemJob
                                 ActiveAlert.find(@host_item.active_high_id).update(resolved: true)
                             end
                             update_host_item(@host_item,nil,nil,nil)
-                        end
+                        #end
                     end
                 end
             end

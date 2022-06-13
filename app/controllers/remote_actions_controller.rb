@@ -73,23 +73,56 @@ class RemoteActionsController < ApplicationController
     end
 
     def apply_remote_action
-        
+        require "net/scp"
         @host = Host.find(params[:host_id])
         @remote_action = RemoteAction.find(params[:remote_action_id])
         begin
-            Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
-                if @host.run_as_sudo 
-                    output=(ssh.exec! "sudo "+@remote_action.command_or_script)
-                else
-                    output=(ssh.exec! @remote_action.command_or_script)
+            if @remote_action.script 
+                Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
+                    if @host.run_as_sudo 
+                        File.open("/tmp/deploy.file", "w") { |f| f.write "#{@remote_action.command_or_script}" }
+                        sudo_pass="echo -e \"#{@host.password}\n\" | "
+                        ssh.scp.upload!("/tmp/deploy.file", "#{@remote_action.path_to_script}")
+                        ssh.exec! sudo_pass+"sudo -S chmod +x #{@remote_action.path_to_script}"
+                        ssh.exec! sudo_pass+"sudo -S sed -i.bak s/\r//g #{@remote_action.path_to_script}"
+                        output=(ssh.exec! sudo_pass+"sudo -S #{@remote_action.path_to_script}")
+                    else
+                        #ssh.exec! "touch #{@remote_action.path_to_script}"
+                        #ssh.exec! "printf \"#{command}\" > #{@remote_action.path_to_script}"
+                        #ssh.exec! "sed -i.bak s/\r//g #{@remote_action.path_to_script}"
+                        #
+                        File.open("/tmp/deploy.file", "w") { |f| f.write "#{@remote_action.command_or_script}" }
+                        ssh.scp.upload!("/tmp/deploy.file", "#{@remote_action.path_to_script}")
+                        ssh.exec! "chmod +x #{@remote_action.path_to_script}"
+                        ssh.exec! "sed -i.bak s/\r//g #{@remote_action.path_to_script}"
+                        output=(ssh.exec! "#{@remote_action.path_to_script}")
+                    end
+                    @message = "Command \"#{@remote_action.action_name}\" returned:\n" + output #@actions.script_content
+                    if output.empty?
+                        @message="Command produced no output"
+                    end
+                    respond_to do |format|
+                        format.js { render partial: 'remote_actions/result' }
+                    end
                 end
                 
-                @message = "Command \"#{@remote_action.action_name}\" returned:\n" + output #@actions.script_content
-                if output.empty?
-                    @message="Command produced no output"
-                end
-                respond_to do |format|
-                    format.js { render partial: 'remote_actions/result' }
+            else
+                Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
+                    if @host.run_as_sudo 
+                        sudo_pass="echo -e \"#{@host.password}\n\" | "
+                        output=(ssh.exec! sudo_pass+"sudo -S "+@remote_action.command_or_script)
+                        
+                    else
+                        output=(ssh.exec! @remote_action.command_or_script)
+                    end
+                    @message = "Command \"#{@remote_action.action_name}\" returned:\n" + output #@actions.script_content
+                    if output.empty?
+                        @message="Command produced no output"
+                    end
+                    respond_to do |format|
+                        format.js { render partial: 'remote_actions/result' }
+                    end
+                   
                 end
             end
         rescue Net::SSH::AuthenticationFailed

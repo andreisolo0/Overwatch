@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
     def configuration
     
     end
+
     def save_configuration
         require 'yaml'
         
@@ -38,10 +39,11 @@ class ApplicationController < ActionController::Base
             "auth"=>@auth,
             "tls"=>@tls
         }
-        
         if @mail_server.present? && @port.present? && @username.present? && @password.present?
             File.open(Rails.root.join("config","mail_config.yml"), "w") { |file| file.write(config.to_yaml) }
-            flash[:success] = "Configuration saved successfully!"
+            File.open(Rails.root.join("config","environments","development.rb"), "a") 
+            
+            flash[:notice] = "Configuration saved successfully!"
             redirect_to configuration_path
         else
             flash[:alert] = "Please fill all the fields!"

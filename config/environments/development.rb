@@ -34,7 +34,17 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  # SMTP settings for gmail
+  config.action_mailer.smtp_settings = {
+    address:               "mail.solomon-andrei.com",
+    port:                  587,
+    user_name:             "overwatch@solomon-andrei.com",
+    password:              "=,26,HAnDULeC",
+    authentication:        "plain",
+    enable_starttls_auto:  true
+  }
 
   config.action_mailer.perform_caching = false
 
@@ -75,4 +85,7 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
   config.hosts << "overwatch-app.solomon-andrei.com"
   config.force_ssl = true
+
+  
+
 end
