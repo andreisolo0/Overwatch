@@ -145,9 +145,6 @@ class ScheduleItemJob
                         end
                     elsif threshold_warning.is_a?(Float) and !threshold_high.nil? and !threshold_warning.nil? and value >= threshold_warning and value < threshold_high 
                         puts "Warning alert triggered"
-                        puts value
-                        puts threshold_warning
-                        puts threshold_high
                         if @host_item.active_warning_id.nil? and @host_item.active_low_id.nil? and @host_item.active_high_id.nil? 
                             if (ActiveAlert.where(item_id: item_id, host_id: host_id).count == 0)
                                 @alert=ActiveAlert.create(host_item_id: @host_item.id, item_id: item_id, severity: "warning", threshold: threshold_warning, host_id: host_id)

@@ -35,24 +35,24 @@ class RecoveryJob
     end
 
     def perform(*args)
-        
-          @host=Host.find(args[0])
-          @command=RemoteAction.find(args[1])
-          @alert=ActiveAlert.find(args[2])
-          exit_code=nil
-          puts "Recovery job for on #{@host.hostname} started"
-          Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
-                  exit_code=(ssh.exec! @command.command_or_script)
+          if !args[1].nil?
+            @host=Host.find(args[0])
+            @command=RemoteAction.find(args[1])
+            @alert=ActiveAlert.find(args[2])
+            exit_code=nil
+            puts "Recovery job for on #{@host.hostname} started"
+            Net::SSH.start(@host.ip_address_or_fqdn, @host.user_to_connect, :password => @host.password, :port => @host.ssh_port, non_interactive: true) do |ssh|
+                    exit_code=(ssh.exec! @command.command_or_script)
+            end
+            @alert.update(new: false)
+            if exit_code.exitstatus == 0 
+                @alert.update(resolved: true)
+                @alert.update(resolved_at: Time.now)
+            else
+                @alert.update(resolved: false)
+            end
+            puts "Recovery job for on #{@host.hostname} finished. Problem solved: #{@alert.resolved}"
           end
-          @alert.update(new: false)
-          if exit_code.exitstatus == 0 
-              @alert.update(resolved: true)
-              @alert.update(resolved_at: Time.now)
-          else
-              @alert.update(resolved: false)
-          end
-          puts "Recovery job for on #{@host.hostname} finished. Problem solved: #{@alert.resolved}"
-        
     end
 
 end

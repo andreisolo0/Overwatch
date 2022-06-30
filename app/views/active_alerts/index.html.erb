@@ -62,11 +62,15 @@
                         <td ><%= alert.severity.upcase%></td>
                         <td><%= HostItem.where(host_id: alert.host_id, item_id: alert.item_id).last.value%></td>
                         <td><%= alert.created_at%></td>
-                        <td><%= alert.resolved_at%></td>
+                        <td><%= alert.resolved_at %></td>
                         <td>
-                        <%= puts "Actions like ACK will go here" %>
+                        <%if alert.resolved %>
+                            <%= link_to 'Delete', alert , method: :delete, class: "btn btn-danger text-white" , data: { confirm: 'Are you sure you want to remove this alert?' } %>
+                        <%else%>
+                            N/A
+                        <%end%>
                         </td>
-                    </tr>
+                    </tr>   
                 <% end %>
             </tbody>
         </table>
