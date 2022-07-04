@@ -74,13 +74,13 @@
               </div>
 
             <% else %>
-              <!-- <li class="nav-item">
-                <%= link_to "About", about_path, class: "nav-link" %>
+              <li class="nav-item text-white" style="padding-top: 1%;">
+              Check me on Github
               </li>
               <li class="nav-item">
-                <%= link_to "Sensors", about_path, class: "nav-link" %>
+              <a href="https://github.com/andreisolo0/Overwatch-IoT-Systems-Monitoring"><img src="<%= asset_path('github.jpg') %>" class="img-fluid d-block" width=7% height=7% style="padding-left: 1%;"></a>
               </li>
-              <li class="nav-item">
+              <!--<li class="nav-item">
                 <%= link_to "Features", about_path, class: "nav-link" %>
               </li>
               
@@ -91,6 +91,6 @@
             <% end %>
 
           </form>
-          <h4 class="badge badge-info">Notice: Currently running on Heroku, functionality is limited. All items, remote actions and hosts are provided as an example.</h4>
+         
         </div>
-      </nav>
+      </nav> <span class="badge badge-warning" style="">Notice: Currently running on Heroku, functionality is limited. All items, remote actions and hosts are provided as an example.</span>
