@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
     before_action :require_user
     before_action :set_item, only: %i[ show edit update destroy ]
-    
+    before_action :permit_edit_admin, only: [:edit, :update, :destroy]
     
     def new
         @item = Item.new
@@ -76,6 +76,13 @@ class ItemsController < ApplicationController
     end
     def set_item
         @item = Item.find(params[:id])
+    end
+
+    def permit_edit_admin
+        if current_user.admin != true
+            flash[:alert] = "You don't have rights to modify this item"
+            redirect_to items_path
+        end
     end
 
 end
