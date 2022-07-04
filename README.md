@@ -1,3 +1,5 @@
+# Overwatch monitoring app
+
 **Overwatch** app written in Ruby on Rails on Rails for monitoring Linux devices and IoT sensors with remote actions.
 
 Works with Sidekiq and Redis to process events(collect values, execute actions like recovery and check for active alerts)
