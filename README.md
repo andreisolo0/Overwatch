@@ -19,3 +19,6 @@ user: demo
 
 password: p4ssw0rd
 ```
+
+Check out some docs (Romanian):
+[proiect-28-71.pdf](https://github.com/andreisolo0/Overwatch-IoT-Systems-Monitoring/files/9039898/proiect-28-71.pdf)
