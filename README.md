@@ -15,7 +15,7 @@ Can provide alerts via e-mail.
 Developed as a personal project, not at production grade, with the purpose of learning. 
 
 Test me on:
-https://overwatch.solomon-andrei.com :smile: 
+https://overwatch-demo.herokuapp.com/ :smile: 
 ```
 user: demo 
 
