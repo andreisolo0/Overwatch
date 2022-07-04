@@ -52,6 +52,9 @@
               <% if @current_user.id == host.user_id || @current_user.admin == true %>
                 <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white"%>
                 <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
+              <%else%>
+                <%= link_to 'Edit', edit_host_path(host), class: "btn btn-outline-warning text-white disabled"%>
+                <%= link_to 'Delete', host, method: :delete, class: "btn btn-outline-danger text-white disabled" , data: { confirm: 'Are you sure you want to delete '+host.hostname+'?' } %>
               <% end %>
               </td>
             </tr>

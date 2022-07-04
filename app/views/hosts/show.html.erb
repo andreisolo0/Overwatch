@@ -116,10 +116,13 @@
             </div>
               <%end%>
               <% if @current_user == User.find(@host.user_id) || @current_user.admin == true %>
-                <%= link_to "Test connection", test_connection_path(@host.id), method: :get, class: "btn btn-outline-success" %> 
                 <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info" %>
                 <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+              <%else%>
+                <%= link_to "Edit", edit_host_path(@host), class: "btn btn-outline-info disabled" %>
+                <%= link_to "Delete", host_path(@host), class: "btn btn-outline-danger disabled", method: :delete, data: {confirm: "Are you sure?"} %>
               <% end %>
+              <%= link_to "Test connection", test_connection_path(@host.id), method: :get, class: "btn btn-outline-success" %>
             </div>
             
             <div class="card-footer text-muted">

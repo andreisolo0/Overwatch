@@ -13,10 +13,13 @@
               </div>
               <div class="card-text text-center font-weight-bold ">Interval to run:  <%=  @item.interval_to_read %></div>
               
-
-              <%= link_to "Edit", edit_item_path(@item), class: "btn btn-outline-info" %>
-              <%= link_to "Delete", item_path(@item), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
-              
+              <%if current_user.admin == true%>
+                <%= link_to "Edit", edit_item_path(@item), class: "btn btn-outline-info" %>
+                <%= link_to "Delete", item_path(@item), class: "btn btn-outline-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+              <%else%>
+                <%= link_to "Edit", edit_item_path(@item), class: "btn btn-outline-info disabled" %>
+              <%= link_to "Delete", item_path(@item), class: "btn btn-outline-danger disabled", method: :delete, data: {confirm: "Are you sure?"} %>
+              <%end%>
               <%= link_to "Back", items_path, class: "btn btn-outline-warning" %>
             </div>
 

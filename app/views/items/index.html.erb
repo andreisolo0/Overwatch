@@ -23,10 +23,17 @@
             <td ><%= item.command_to_read %></td>
             <td ><%= item.interval_to_read %></td>
             <td>
+            <% if current_user.admin == true%>
+              <%= link_to 'Edit', edit_item_path(item), class: "btn btn-warning text-white"%>
+              <%= link_to 'Unassign', unassign_items_path(:id => item.id), class: "btn btn-primary text-white", data: { confirm: 'Are you sure you want to unassign '+item.item_name+' from all hosts?' }%>
+              <%= link_to 'Delete', item, method: :delete, class: "btn btn-danger text-white" , data: { confirm: 'Are you sure you want to delete '+item.item_name+'?' } %>
+            <%else%>
+              <%= link_to 'Edit', edit_item_path(item), class: "btn btn-warning text-white disabled "%>
+              <%= link_to 'Unassign', unassign_items_path(:id => item.id), class: "btn btn-primary text-white disabled", data: { confirm: 'Are you sure you want to unassign '+item.item_name+' from all hosts?' }%>
+              <%= link_to 'Delete', item, method: :delete, class: "btn btn-danger text-white disabled" , data: { confirm: 'Are you sure you want to delete '+item.item_name+'?' } %>
+            <%end%>
             <%= link_to 'View', item_path(item) , class: "btn btn-success text-white" %>
-            <%= link_to 'Edit', edit_item_path(item), class: "btn btn-warning text-white"%>
-            <%= link_to 'Unassign', unassign_items_path(:id => item.id), class: "btn btn-primary text-white", data: { confirm: 'Are you sure you want to unassign '+item.item_name+' from all hosts?' }%>
-            <%= link_to 'Delete', item, method: :delete, class: "btn btn-danger text-white" , data: { confirm: 'Are you sure you want to delete '+item.item_name+'?' } %>
+
             </td>
           </tr>
       <% end %>
