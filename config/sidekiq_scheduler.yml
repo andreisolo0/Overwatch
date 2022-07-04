@@ -7,27 +7,3 @@ ping_localhost:
 check_active_alerts:
   every: 1m
   class: CheckActiveAlertsJob
-ping_pi.remote:
-  every:
-  - 1m
-  class: PingJob
-  args:
-  - 3
-autopatch_overwatch.localhost:
-  every:
-  - 1d
-  class: AutopatchJob
-  args:
-  - 1
-ping_ubuntu.solomon-andrei.com:
-  every:
-  - 1m
-  class: PingJob
-  args:
-  - 10
-ping_centos.solomon-andrei.com:
-  every:
-  - 1m
-  class: PingJob
-  args:
-  - 11
