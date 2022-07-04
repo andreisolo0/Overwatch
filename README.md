@@ -11,3 +11,11 @@ Developed on RoR 6 with ruby 2.6
 Can provide alerts via e-mail.
 
 Developed as a personal project, not at production grade, with the purpose of learning. 
+
+Test me on:
+https://overwatch.solomon-andrei.com :smile: 
+```
+user: demo 
+
+password: p4ssw0rd
+```
